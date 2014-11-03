@@ -1,0 +1,16 @@
+{
+    "name": "viison/composer-shopware-shop-manager",
+    "type": "composer-plugin",
+    "require": {
+        "composer-plugin-api": "*",
+        "composer/installers": "1.0.18"
+    },
+    "extra": {
+        "class": ["Viison\\ComposerShopwareShopManager\\Plugin"]
+    },
+    "autoload": {
+        "psr-0": {
+            "Viison\\ComposerShopwareShopManager\\": "src/"
+        }
+    }
+}
