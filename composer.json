@@ -1,0 +1,22 @@
+{
+    "name": "Viison/composer-rules-plugin",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "description": "This free and open source MIT-licensed Composer plugin allows you to add additional processing rules to your Composer-based dependency installation.",
+    "support": {
+        "issues": "https://github.com/VIISON/composer-rules-plugin/issues"
+    },
+    "homepage": "https://github.com/VIISON/composer-rules-plugin",
+    "require": {
+        "composer-plugin-api": "1.0.0",
+        "composer/installers": "1.0.18"
+    },
+    "extra": {
+        "class": ["Viison\\ComposerRulesPlugin\\Plugin"]
+    },
+    "autoload": {
+        "psr-0": {
+            "Viison\\ComposerRulesPlugin\\": "src/"
+        }
+    }
+}
