@@ -1,5 +1,7 @@
 <?php
 
+namespace Viison\ComposerShopwareShopManager;
+
 class RuleConfig {
 
     /**
