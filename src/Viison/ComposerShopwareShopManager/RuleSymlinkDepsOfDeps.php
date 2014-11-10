@@ -61,7 +61,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         // FIXME: Check innerDeps are actually dependencies of $package.
         foreach ($matchInnerDeps as $matchInnerDep) {
             $innerDeps = $this->repositoryManager->findPackages($matchInnerDep, null);
-            if (empty($innerDep))
+            if (empty($innerDeps))
                 throw new \Exception('Inner dependency ' . $matchInnerDep
                 . ' of ' . $package->getName() . ' not found');
 
