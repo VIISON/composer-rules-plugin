@@ -140,6 +140,8 @@ class Installer extends LibraryInstaller {
             $package,
             $this);
 
+        echo "     --          canGetInstallPath = $canGetInstallPath\n";
+
         if (!$canGetInstallPath) {
             $installPath = parent::getInstallPath($package);
             echo "     ->   ordinary installPath = $installPath\n";
