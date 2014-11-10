@@ -110,7 +110,7 @@ class Installer extends LibraryInstaller {
         $rules = $this->getInstallerRulesConfig();
         $ruleConfig = new RuleConfig($rules);
         $ruleFactory = new RuleFactory(
-            $this, $this->io, $this->filesystem);
+            $this->composer, $this->io, $this->filesystem);
         return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory);
     }
 
