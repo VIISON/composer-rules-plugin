@@ -16,16 +16,6 @@ class RuleFactory {
      */
     protected $map;
 
-    /**
-     * @var InstallationManager
-     */
-    protected $installationManager;
-
-    /**
-     * @var RepositoryManager
-     */
-    protected $repositoryManager;
-
     public function __construct(
         Composer $composer, IOInterface $io, Filesystem $filesystem)
     {
