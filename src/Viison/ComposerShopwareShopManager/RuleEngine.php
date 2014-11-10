@@ -65,6 +65,8 @@ class RuleEngine {
 
         if ($result instanceof RuleResultWithValue)
             return $result->getValue();
+        elseif ($result instanceof RuleResultNone)
+            return null;
         else
             throw new \Exception('Not implemented. Result = '
                 . json_encode($result));
