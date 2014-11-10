@@ -27,8 +27,11 @@ class RuleFactory {
     {
         $this->installationManager = $installationManager;
         $this->map = array(
-            'rule-symlink-deps-of-deps' => function($args) use ($installationManager) {
-                return new RuleSymlinkDepsOfDeps($args, $installationManager);
+            'rule-symlink-deps-of-deps' => function($args)
+                use ($installationManager, $repositoryManager)
+            {
+                return new RuleSymlinkDepsOfDeps($args, $installationManager,
+                    $repositoryManager);
             }
         );
     }
