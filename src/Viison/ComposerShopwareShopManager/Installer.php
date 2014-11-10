@@ -67,6 +67,7 @@ class Installer extends LibraryInstaller {
     protected function constructRules(PackageInterface $package)
     {
         $extra = $this->getRootPackage()->getExtra();
+        var_dump($extra);
         return $extra;
     }
 
