@@ -116,6 +116,13 @@ class Installer extends LibraryInstaller {
         return $this->ruleEngine = new RuleEngine($ruleConfig);
     }
 
+    public function isInstalled(InstalledRepositoryInterface $repo,
+        PackageInterface $package)
+    {
+        $this->logMethod(__METHOD__, $repo, $package);
+        return parent::isInstalled($repo, $package);
+    }
+
     public function install(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
