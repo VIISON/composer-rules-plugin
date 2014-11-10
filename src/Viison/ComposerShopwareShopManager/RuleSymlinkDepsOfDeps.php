@@ -36,8 +36,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package,
-            $this->params));
+        //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package,
+        //    $this->params));
 
         $matchOuterDeps = $this->params[static::CONFIG_MATCH_OUTER_DEPS];
         $matchInnerDeps = $this->params[static::CONFIG_MATCH_INNER_DEPS];
