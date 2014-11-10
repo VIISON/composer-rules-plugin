@@ -125,6 +125,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 . ' but it should point to ' . $src . '.');
         }
 
+        $wasCreated = false;
         try {
             $wasCreated = symlink($dest, $src);
         } catch (\Exception $cause) {
