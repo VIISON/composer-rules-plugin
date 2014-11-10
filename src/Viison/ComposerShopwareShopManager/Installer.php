@@ -20,15 +20,12 @@ class Installer extends LibraryInstaller {
         Composer $composer,
         Filesystem $filesystem = null)
     {
-        echo __METHOD__, " filesystem = ", var_dump($filesystem), "\n";
         parent::__construct($io, $composer, null, $filesystem);
         $this->checkConfig();
     }
 
     protected function checkConfig()
     {
-        $this->getNewRootDir(); // Or die by exception.
-        // Check getAsRoot must be a package listed under "required".
     }
 
     protected function getRootPackage()
@@ -67,8 +64,25 @@ class Installer extends LibraryInstaller {
         return true;
     }
 
+    protected function constructRules(PackageInterface $package)
+    {
+        return array();
+    }
+
     public function getInstallPath(PackageInterface $package)
     {
+        $pkgInfo = new \stdclass;
+        $pkgInfo->name = $package->getName();
+        $pkgInfo->prettyName = $package->getPrettyName();
+        $pkgInfo->typ = $package->getType();
+        $pkgInfo->targetDir = $package->getTargetDir();
+        $pkgInfo->extra = $package->getExtra();
+
+        $pkgInfo->rules = $this->constructRules($package);
+
+        echo "\n\n\n\n\n", __METHOD__, '(', str_replace("\n", "\n        ", json_encode($pkgInfo,  JSON_PRETTY_PRINT)), ')', ":\n";
+
+        throw new \Exception('not doing anything');
         $pkgInfo = new \stdclass;
         $pkgInfo->name = $package->getName();
         $pkgInfo->prettyName = $package->getPrettyName();
@@ -98,7 +112,6 @@ class Installer extends LibraryInstaller {
         }*/
 
         // FIXME: Throws if not set.
-        $asRootPackage = $this->getAsRoot();
         if (isset($asRootPackage) && $package->getName() === $asRootPackage)
             return $installPath = $this->getNewRootDir();
 
