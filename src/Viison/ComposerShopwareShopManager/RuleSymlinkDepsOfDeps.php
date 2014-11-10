@@ -39,8 +39,9 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package,
         //    $this->params));
 
-        $matchOuterDeps = array_map(strtolower, $this->params[static::CONFIG_MATCH_OUTER_DEPS]);
-        $matchInnerDeps = array_map(strtolower, $this->params[static::CONFIG_MATCH_INNER_DEPS]);
+        // FIXME: Composer seems to have some normalization rules ... Check.
+        $matchOuterDeps = array_map(\strtolower, $this->params[static::CONFIG_MATCH_OUTER_DEPS]);
+        $matchInnerDeps = array_map(\strtolower, $this->params[static::CONFIG_MATCH_INNER_DEPS]);
 
         if (!in_array($package->getName(), $matchOuterDeps, true)) {
             $this->logMethodStep(__METHOD__, array('Not matched: '
