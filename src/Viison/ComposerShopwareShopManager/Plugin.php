@@ -10,7 +10,8 @@ class Plugin implements PluginInterface {
 
     public function activate(Composer $composer, IOInterface $io)
     {
-        $installer = new Installer($io, $composer);
+        $installer = new Installer($io, $composer,
+            $composer->getInstallationManager());
         $composer->getInstallationManager()->addInstaller($installer);
     }
 

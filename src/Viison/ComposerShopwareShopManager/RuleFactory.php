@@ -2,6 +2,8 @@
 
 namespace Viison\ComposerShopwareShopManager;
 
+use Composer\Installer\InstallationManager;
+
 class RuleFactory {
 
     /**
@@ -9,11 +11,17 @@ class RuleFactory {
      */
     protected $map;
 
-    public function __construct()
+    /**
+     * @var InstallationManager
+     */
+    protected $installationManager;
+
+    public function __construct(InstallationManager $installationManager)
     {
+        $this->installationManager = $installationManager;
         $this->map = array(
-            'rule-symlink-deps-of-deps' => function($args) {
-                return new RuleSymlinkDepsOfDeps($args);
+            'rule-symlink-deps-of-deps' => function($args) use ($installationManager) {
+                return new RuleSymlinkDepsOfDeps($args, $installationManager);
             }
         );
     }
