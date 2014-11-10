@@ -68,7 +68,7 @@ class Installer extends LibraryInstaller {
                 'The root package\'s "extra.'
                 . static::CONFIG_VIISON_INSTALLER_KEY
                 . '" configuration must be an array.');
-        return $extra[static::CONFIG_VIISON_INSTALLER_KEY]
+        return $extra[static::CONFIG_VIISON_INSTALLER_KEY];
     }
 
     protected function getInstallerRulesConfig()
