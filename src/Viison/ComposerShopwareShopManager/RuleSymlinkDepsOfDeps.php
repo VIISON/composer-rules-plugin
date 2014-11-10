@@ -94,10 +94,10 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 $this->createSymlink($symlinkDest, $innerDir);
             } catch (\Exception $cause) {
                 throw new \Exception('Could not create symlink from '
-                    $innerDir . ' to ' . $symlinkDest . ' for package '
-                    $outer->getName() . '\'s inner dependency '
-                    $inner->getName() . ' with rule config = '
-                .   json_encode($this->params),
+                    . $innerDir . ' to ' . $symlinkDest . ' for package '
+                    . $outer->getName() . '\'s inner dependency '
+                    . $inner->getName() . ' with rule config = '
+                    . json_encode($this->params),
                     $cause);
             }
     }
