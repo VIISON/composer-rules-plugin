@@ -103,38 +103,38 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             }
     }
 
-    protected function createSymlink($dest, $src)
+    protected function createSymlink($link, $target)
     {
-        if (file_exists($dest)) {
+        if (file_exists($link)) {
 
-            if (!is_link($dest))
-                throw new \Exception('A file at ' . $dest
+            if (!is_link($link))
+                throw new \Exception('A file at ' . $link
                     . ' already exists and is not a symbolic link.');
 
-            $oldTarget = @readlink($dest);
+            $oldTarget = @readlink($link);
             if ($oldTarget === false)
                 throw new \Exception('The target of the symbolic link at
-                ' . $dest . ' could not be read.');
+                ' . $link . ' could not be read.');
 
-            if ($oldTarget === $src)
+            if ($oldTarget === $target)
                 // Everything is fine, the link is already set up correctly:
                 return;
 
-            throw new \Exception('A symbolic link at ' . $dest
+            throw new \Exception('A symbolic link at ' . $link
                 . ' already exists. It points to ' . $oldTarget
-                . ' but it should point to ' . $src . '.');
+                . ' but it should point to ' . $target . '.');
         }
 
         $wasCreated = false;
         $cause = null;
         try {
-            $wasCreated = symlink($dest, $src);
+            $wasCreated = symlink($link, $target);
         } catch (\Exception $cause) {
         }
 
         if ($wasCreated === false || isset($cause))
-            throw new \Exception('Could not create symlink from '
-                . $src. ' to ' . $dest,
+            throw new \Exception('Could not create symlink to '
+                . $target. ' at ' . $link,
                 0,
                 $cause);
     }
