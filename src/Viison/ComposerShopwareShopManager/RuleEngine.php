@@ -35,7 +35,7 @@ class RuleEngine {
         InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
+        //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
         $this->onEach(function($rule) use ($rootPackage, $repo, $package) {
             $rule->postInstall($rootPackage, $repo, $package);
         });
