@@ -7,6 +7,10 @@ use Composer\Repository\WritableRepositoryInterface;
 
 trait DebugLog {
 
+    protected function logMethodStep($method, array $args = array()) {
+        return str_replace("\n", "\n    ", $this->logMethod($method, $args));
+    }
+
     protected function logMethod($method, array $args = array())
     {
         $args = array_map(function($item) {
