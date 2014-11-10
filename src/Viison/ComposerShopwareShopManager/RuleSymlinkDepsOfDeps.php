@@ -41,7 +41,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $this->repositoryManager = $repositoryManager;
     }
 
-    public function postInstall(PackageInterface $rootPackage,
+    public function postInstall(RuleResult $prevResult,
+        PackageInterface $rootPackage,
         InstalledRepositoryInterface $repo,
         PackageInterface $package,
         InstallerInterface $mainInstaller)
