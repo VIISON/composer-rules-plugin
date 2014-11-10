@@ -9,7 +9,7 @@ use Composer\IO\IOInterface;
 use Composer\Composer;
 use Composer\Util\Filesystem;
 
-class RuleSymlinkDepsOfDeps extends EmptyRule {
+class RuleAddInstaller extends EmptyRule {
 
     const CONFIG_INSTALLER_CLASS = 'class';
 
