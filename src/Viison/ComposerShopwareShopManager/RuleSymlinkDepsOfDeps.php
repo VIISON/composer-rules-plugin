@@ -80,13 +80,15 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 . ' of ' . $package->getName() . ' not found');
 
             foreach ($innerDeps as $innerDep)
-                $this->createSymlinks($package, $innerDep);
+                $this->createSymlinks($package, $innerDep, $repo);
         }
 
         // Now we have to create symlinks for our outer, inner combination.
     }
 
-    protected function createSymlinks(PackageInterface $outer, PackageInterface $inner)
+    protected function createSymlinks(PackageInterface $outer,
+        PackageInterface $inner,
+        InstalledRepositoryInterface $repo)
     {
         $symlinkDestPatterns = $this->params[static::CONFIG_SYMLINK_DESTINATION];
 
