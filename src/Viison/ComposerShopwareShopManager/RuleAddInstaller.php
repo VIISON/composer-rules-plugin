@@ -52,7 +52,8 @@ class RuleAddInstaller extends EmptyRule {
         return new RuleValueResult($supports);
     }
 
-    public function getInstallPath(PackageInterface $rootPackage,
+    public function getInstallPath(RuleResult $prevResult,
+        PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         $installPath = $this->getSubInstaller()->getInstallPath($package);
