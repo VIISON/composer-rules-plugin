@@ -2,9 +2,13 @@
 
 namespace Viison\ComposerShopwareShopManager;
 
-class RuleEngine implements Composer\Installer\InstallerInterface {
+use Composer\Installer\InstallerInterface;
+
+class RuleEngine implements InstallerInterface {
 
     const CONFIG_RULE_NAME = 'rule';
+
+    use DebugLog;
 
     /**
      * @var RuleConfig
@@ -30,6 +34,7 @@ class RuleEngine implements Composer\Installer\InstallerInterface {
         InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
+        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
         $this->onEach(function($rule) {
             $rule->postInstall($rootPackage, $repo, $package);
         });
