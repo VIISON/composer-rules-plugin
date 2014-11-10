@@ -133,6 +133,12 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 . ' but it should point to ' . $target . '.');
         }
 
+        $linkDir = dirname($link);
+        if (!empty($linkDir))
+            $this->filesystem->ensureDirectoryExists(dirname($link));
+
+        $this->filesystem->ensureDirectoryExists(dirname($target));
+
         $wasCreated = false;
         $cause = null;
         try {
