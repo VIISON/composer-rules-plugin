@@ -82,7 +82,9 @@ class Installer extends LibraryInstaller {
 
         echo "\n\n\n\n\n", __METHOD__, '(', str_replace("\n", "\n        ", json_encode($pkgInfo,  JSON_PRETTY_PRINT)), ')', ":\n";
 
-        throw new \Exception('not doing anything');
+        return parent::getInstallPath($package);
+        // DEAD:
+        //throw new \Exception('not doing anything');
         $pkgInfo = new \stdclass;
         $pkgInfo->name = $package->getName();
         $pkgInfo->prettyName = $package->getPrettyName();
