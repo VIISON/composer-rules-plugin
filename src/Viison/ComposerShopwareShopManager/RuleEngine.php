@@ -65,7 +65,7 @@ class RuleEngine {
 
         if ($result instanceof RuleResultWithValue)
             return $result->getValue();
-        elseif ($result instanceof RuleResultNone)
+        elseif ($result instanceof RuleNoneResult)
             return null;
         else
             throw new \Exception('Not implemented. Result = '
@@ -75,7 +75,7 @@ class RuleEngine {
     protected function onEach(Callable $do)
     {
         $rules = $this->config->get();
-        $result = new RuleResultNone();
+        $result = new RuleNoneResult();
         foreach ($rules as $ruleId => $ruleConfig) {
             $ruleName = $ruleConfig[static::CONFIG_RULE_NAME];
             if (!isset($this->instances[$ruleId]))
