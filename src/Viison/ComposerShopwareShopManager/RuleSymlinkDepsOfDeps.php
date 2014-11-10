@@ -57,6 +57,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             if (!isset($innerDep))
                 throw new \Exception('Inner dependency ' . $matchInnerDep
                 . ' of ' . $package->getName() . ' not found');
+            echo "    ### innerDep: ", var_dump($innerDep);
 
             $this->createSymlink($package, $innerDep);
         }
