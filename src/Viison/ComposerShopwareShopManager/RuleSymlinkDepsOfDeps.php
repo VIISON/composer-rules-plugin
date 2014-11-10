@@ -162,12 +162,15 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         if (!is_dir($target))
             throw new \Exception('Installation of target did not happen at '
                 . $target . '.');
-        $this->filesystem->ensureDirectoryExists(dirname($target));
+
+        $targetRealpath = realpath($target);
+        if ($targetRealpath === false)
+            throw new \Exception('No realpath for ' . $target);
 
         $wasCreated = false;
         $cause = null;
         try {
-            $wasCreated = symlink($target, $link);
+            $wasCreated = symlink($targetRealpath, $link);
         } catch (\Exception $cause) {
         }
 
