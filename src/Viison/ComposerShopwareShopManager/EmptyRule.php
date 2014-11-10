@@ -10,7 +10,8 @@ class EmptyRule implements Rule {
 
     public function postInstall(PackageInterface $rootPackage,
         InstalledRepositoryInterface $repo,
-        PackageInterface $package)
+        PackageInterface $package,
+        InstallerInterface $mainInstaller)
     {
         return new RuleValueResult(null); // FIXME
     }
