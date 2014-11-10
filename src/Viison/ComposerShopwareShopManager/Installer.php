@@ -108,7 +108,8 @@ class Installer extends LibraryInstaller {
             return $this->ruleEngine;
         $rules = $this->getInstallerRulesConfig();
         $ruleConfig = new RuleConfig($rules);
-        return $this->ruleEngine = new RuleEngine($ruleConfig);
+        $ruleFactory = new RuleFactory();
+        return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory);
     }
 
     public function isInstalled(InstalledRepositoryInterface $repo,
