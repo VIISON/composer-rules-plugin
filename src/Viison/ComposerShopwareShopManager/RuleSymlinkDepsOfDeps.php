@@ -23,13 +23,20 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
      */
     protected $installationManager;
 
+    /**
+     * @var RepositoryManager
+     */
+    protected $repositoryManager;
+
     use DebugLog;
 
     public function __construct(array $params,
-        InstallationManager $installationManager)
+        InstallationManager $installationManager,
+        RepositoryManager $repositoryManager)
     {
         $this->params = $params;
         $this->installationManager = $installationManager;
+        $this->repositoryManager = $repositoryManager;
     }
 
     public function postInstall(PackageInterface $rootPackage,
@@ -52,7 +59,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         // FIXME: Check innerDeps are actually dependencies of $package.
         foreach ($matchInnerDeps as $matchInnerDep) {
-            $innerDeps = $repo->findPackages($matchInnerDep);
+            $innerDeps = $this->repoManager>findPackages($matchInnerDep);
             if (empty($innerDep))
                 throw new \Exception('Inner dependency ' . $matchInnerDep
                 . ' of ' . $package->getName() . ' not found');

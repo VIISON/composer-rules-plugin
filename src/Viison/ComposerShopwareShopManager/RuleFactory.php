@@ -16,7 +16,14 @@ class RuleFactory {
      */
     protected $installationManager;
 
-    public function __construct(InstallationManager $installationManager)
+    /**
+     * @var RepositoryManager
+     */
+    protected $repositoryManager;
+
+    public function __construct(
+        InstallationManager $installationManager,
+        RepositoryManager $repositoryManager)
     {
         $this->installationManager = $installationManager;
         $this->map = array(

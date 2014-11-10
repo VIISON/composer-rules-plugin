@@ -8,8 +8,6 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 
-use Composer\Installer\InstallationManager;
-
 class Installer extends LibraryInstaller {
 
     use DebugLog;
@@ -22,11 +20,6 @@ class Installer extends LibraryInstaller {
     const CONFIG_RULES = 'rules';
 
     /**
-     * @var InstallationManager
-     */
-    protected $installationManager;
-
-    /**
      * @var RuleEngine
      */
     private $ruleEngine;
@@ -34,10 +27,8 @@ class Installer extends LibraryInstaller {
     public function __construct(
         IOInterface $io,
         Composer $composer,
-        InstallationManager $installationManager,
         Filesystem $filesystem = null)
     {
-        $this->installationManager = $installationManager;
         parent::__construct($io, $composer, null, $filesystem);
         $this->checkConfig();
     }
@@ -117,7 +108,9 @@ class Installer extends LibraryInstaller {
             return $this->ruleEngine;
         $rules = $this->getInstallerRulesConfig();
         $ruleConfig = new RuleConfig($rules);
-        $ruleFactory = new RuleFactory($this->installationManager);
+        $ruleFactory = new RuleFactory(
+            $this->composer->getInstallationManager(),
+            $this->composer->getRepositoryManager());
         return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory);
     }
 
