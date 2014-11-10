@@ -15,6 +15,8 @@ class Installer extends LibraryInstaller {
     const CONFIG_AS_ROOT = 'as-root';
     const CONFIG_FALLBACK = 'fallback';
 
+    const CONFIG_RULES = 'rules';
+
     public function __construct(
         IOInterface $io,
         Composer $composer,
@@ -48,15 +50,44 @@ class Installer extends LibraryInstaller {
         return $this->getConfigValue(static::CONFIG_AS_ROOT);
     }
 
-    protected function getConfigValue($key)
+    /**
+     * @return array
+     */
+    protected function getInstallerConfig()
     {
         $extra = $this->getRootPackage()->getExtra();
-        if (!isset($extra) || !isset($extra[static::CONFIG_VIISON_INSTALLER_KEY]))
+        if (!isset($extra))
+            return array();
+        if (!is_array($extra))
+            throw new \Exception(
+                'The root package\'s "extra" configuration must be an array.');
+        if (!isset($extra[static::CONFIG_VIISON_INSTALLER_KEY]))
+            return array();
+        if (!is_array($extra))
+            throw new \Exception(
+                'The root package\'s "extra.'
+                . static::CONFIG_VIISON_INSTALLER_KEY
+                . '" configuration must be an array.');
+        return $extra[static::CONFIG_VIISON_INSTALLER_KEY]
+    }
+
+    protected function getInstallerRulesConfig()
+    {
+        $installerConfig = $this->getInstallerConfig();
+        if (!isset($installerConfig[static::CONFIG_RULES]))
+            return array();
+        return $installerConfig[static::CONFIG_RULES];
+    }
+
+    protected function getConfigValue($key)
+    {
+        $installerConfig = $this->getInstallerConfig();
+        if (!isset($installerConfig))
             throw new \Exception(
                 'No configuration value found for '
-                . static::CONFIG_VIISON_INSTALLER_KEY . '.'  . $key
+                . 'extra.' . static::CONFIG_VIISON_INSTALLER_KEY . '.'  . $key
                 . ' under "extra" in the root package.');
-        return $extra[static::CONFIG_VIISON_INSTALLER_KEY][$key];
+        return $installerConfig[$key];
     }
 
     public function supports($packageType)
@@ -66,9 +97,8 @@ class Installer extends LibraryInstaller {
 
     protected function constructRules(PackageInterface $package)
     {
-        $extra = $this->getRootPackage()->getExtra();
-        var_dump($extra);
-        return $extra;
+        $rules = array();
+        return $this->getInstallerRulesConfig();
     }
 
     public function getInstallPath(PackageInterface $package)
