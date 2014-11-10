@@ -5,9 +5,9 @@ namespace Viison\ComposerShopwareShopManager;
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Installer\InstallerInterface;
-
-use Composer\Installer\InstallationManager;
-use Composer\Repository\RepositoryManager;
+use Composer\IO\IOInterface;
+use Composer\Composer;
+use Composer\Util\Filesystem;
 
 class RuleSymlinkDepsOfDeps extends EmptyRule {
 
