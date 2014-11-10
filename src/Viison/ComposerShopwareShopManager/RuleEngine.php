@@ -48,6 +48,9 @@ class RuleEngine implements Rule {
 
         if ($result instanceof RuleResultWithValue)
             return $result->getValue();
+        else
+            throw new \Exception('Not implemented. Result = '
+                . json_encode($result));
     }
 
     public function canGetInstallPath(PackageInterface $rootPackage,
@@ -61,6 +64,9 @@ class RuleEngine implements Rule {
 
         if ($result instanceof RuleResultWithValue)
             return $result->getValue();
+        else
+            throw new \Exception('Not implemented. Result = '
+                . json_encode($result));
     }
 
     public function getInstallPath(PackageInterface $rootPackage,
@@ -74,6 +80,9 @@ class RuleEngine implements Rule {
 
         if ($result instanceof RuleResultWithValue)
             return $result->getValue();
+        else
+            throw new \Exception('Not implemented. Result = '
+                . json_encode($result));
     }
 
     protected function onEach(Callable $do)
