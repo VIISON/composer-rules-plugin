@@ -74,7 +74,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
     protected function createSymlink(PackageInterface $outer, PackageInterface $inner)
     {
-        $symlinkDestPattern = $this->params[static::CONFIG_SYMLINK_DESTINATION];
+        $symlinkDestPatterns = $this->params[static::CONFIG_SYMLINK_DESTINATION];
 
         $innerDir = $this->installationManager->getInstallPath($inner);
 
@@ -83,17 +83,18 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             $this->installationManager->getInstallPath($outer)
         );
 
-        $symlinkDest = str_replace($matchVars, $matchReplacements,
+        $symlinkDests = str_replace($matchVars, $matchReplacements,
             $symlinkDestPattern);
 
-        $this->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDest,
-            $symlinkDestPattern));
+        $this->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDests,
+            $symlinkDestPatterns));
 
-        if (!symlink($symlinkDest, $innerDir))
-            throw new \Exception('Could not create symlink from '
-                . $innerDir . ' to ' . $symlinkDest . ' for package '
-                . $outer->getName() . '\'s inner dependency '
-                . $inner->getName() . ' with rule config = '
-                . json_encode($this->params));
+        foreach ($symlinkDests as $symlinkDest)
+            if (!symlink($symlinkDest, $innerDir))
+                throw new \Exception('Could not create symlink from '
+                    . $innerDir . ' to ' . $symlinkDest . ' for package '
+                    . $outer->getName() . '\'s inner dependency '
+                    . $inner->getName() . ' with rule config = '
+                    . json_encode($this->params));
     }
 }
