@@ -124,8 +124,13 @@ class Installer extends LibraryInstaller {
     {
         $this->logMethod(__METHOD__, array($repo, $package));
         parent::install($repo, $package);
-        return $this->getRuleEngine()->postInstall($this->getRootPackage(),
-            $repo, $package);
+        try { // FIXME
+            return $this->getRuleEngine()->postInstall($this->getRootPackage(),
+                $repo, $package);
+        } catch (\Exception $e) {
+            echo $e->getTraceAsString(), "\n";
+            throw $e;
+        }
     }
 
     public function getInstallPath(PackageInterface $package)
