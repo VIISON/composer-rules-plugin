@@ -126,6 +126,6 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         if (!symlink($dest, $src))
             throw new \Exception('Could not create symlink from '
-                    $src. ' to ' . $src);
+                    . $src. ' to ' . $dest);
     }
 }
