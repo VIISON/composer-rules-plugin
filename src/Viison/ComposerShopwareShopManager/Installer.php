@@ -132,7 +132,21 @@ class Installer extends LibraryInstaller {
 
     public function getInstallPath(PackageInterface $package)
     {
-        return parent::getInstallPath($package);
+        $this->logMethod(__METHOD__, array($package));
+
+        $rulesEngine = $this->getRulesEngine();
+        $canGetInstallPath = $rulesEngine->canGetInstallPath(
+            $this->getRootPackage(),
+            $package,
+            $this);
+
+        if (!$canGetInstallPath)
+            return parent::getInstallPath($package);
+
+        return $rulesEngine->getInstallPath(
+            $this->getRootPackage(),
+            $package,
+            $this);
     }
 
     protected function getFallbackInstaller()
