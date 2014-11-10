@@ -66,7 +66,8 @@ class Installer extends LibraryInstaller {
 
     protected function constructRules(PackageInterface $package)
     {
-        return array();
+        $extra = $this->getRootPackage()->getExtra();
+        return $extra;
     }
 
     public function getInstallPath(PackageInterface $package)
