@@ -11,7 +11,8 @@ interface Rule {
     /**
      * @return void
      */
-    public function postInstall(PackageInterface $rootPackage,
+    public function postInstall(RuleResult $prevResult, PackageInterface
+        $rootPackage,
         InstalledRepositoryInterface $repo,
         PackageInterface $package,
         InstallerInterface $mainInstaller);
@@ -22,7 +23,8 @@ interface Rule {
     public function canGetInstallPath(PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller);
 
-    public function getInstallPath(PackageInterface $rootPackage,
+    public function getInstallPath(RuleResult $prevResult, PackageInterface
+        $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller);
 
 }

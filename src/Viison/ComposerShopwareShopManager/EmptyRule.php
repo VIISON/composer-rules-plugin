@@ -8,7 +8,8 @@ use Composer\Repository\InstalledRepositoryInterface;
 
 class EmptyRule implements Rule {
 
-    public function postInstall(PackageInterface $rootPackage,
+    public function postInstall(RuleResult $prevResult,
+        PackageInterface $rootPackage,
         InstalledRepositoryInterface $repo,
         PackageInterface $package,
         InstallerInterface $mainInstaller)
@@ -16,13 +17,15 @@ class EmptyRule implements Rule {
         return new RuleValueResult(null); // FIXME
     }
 
-    public function canGetInstallPath(PackageInterface $rootPackage,
+    public function canGetInstallPath(
+        PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
-        return new RuleValueResult(false);
+        return false;
     }
 
-    public function getInstallPath(PackageInterface $rootPackage,
+    public function getInstallPath(RuleResult $prevResult,
+        PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         throw new \Exception('Not implemented');

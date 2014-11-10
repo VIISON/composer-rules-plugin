@@ -6,7 +6,7 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\InstallerInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
-class RuleEngine implements Rule {
+class RuleEngine {
 
     const CONFIG_RULE_NAME = 'rule';
 
@@ -38,28 +38,12 @@ class RuleEngine implements Rule {
         InstallerInterface $mainInstaller)
     {
         //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
-        $result = $this->onEach(function($rule)
+        $result = $this->onEach(function($rule, $prevResult)
             use ($rootPackage, $repo, $package, $mainInstaller)
             {
-                $rule->postInstall($rootPackage, $repo, $package,
+                $rule->postInstall($prevResult, $rootPackage, $repo, $package,
                     $mainInstaller);
                 return new RuleValueResult(null);
-            });
-
-        if ($result instanceof RuleResultWithValue)
-            return $result->getValue();
-        else
-            throw new \Exception('Not implemented. Result = '
-                . json_encode($result));
-    }
-
-    public function canGetInstallPath(PackageInterface $rootPackage,
-        PackageInterface $package, InstallerInterface $mainInstaller)
-    {
-        $result = $this->onEach(function($rule)
-            use ($rootPackage, $package, $mainInstaller)
-            {
-                return $rule->canGetInstallPath($rootPackage, $package, $mainInstaller);
             });
 
         if ($result instanceof RuleResultWithValue)
@@ -72,10 +56,11 @@ class RuleEngine implements Rule {
     public function getInstallPath(PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
-        $result = $this->onEach(function($rule)
+        $result = $this->onEach(function($rule, $prevResult)
             use ($rootPackage, $package, $mainInstaller)
             {
-                return $rule->getInstallPath($rootPackage, $package, $mainInstaller);
+                if ($rule->canGetInstallPath($rootPackage, $package, $mainInstaller))
+                    return $rule->getInstallPath($prevResult, $rootPackage, $package, $mainInstaller);
             });
 
         if ($result instanceof RuleResultWithValue)
@@ -88,12 +73,14 @@ class RuleEngine implements Rule {
     protected function onEach(Callable $do)
     {
         $rules = $this->config->get();
+        $result = new RuleResultNone();
         foreach ($rules as $ruleId => $ruleConfig) {
             $ruleName = $ruleConfig[static::CONFIG_RULE_NAME];
             if (!isset($this->instances[$ruleId]))
                 $this->instances[$ruleId] = $this->factory
                     ->create($ruleName, $ruleConfig);
-            $result = $do($this->instances[$ruleId]);
+            $prevResult = $result;
+            $result = $do($this->instances[$ruleId], $prevResult);
 
             if (!($result instanceof RuleResult))
                 throw new \Exception('A rule needs to return a rule result, '
