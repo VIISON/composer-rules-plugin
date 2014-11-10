@@ -6,6 +6,7 @@ use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
 use Composer\Installer\InstallationManager;
+use Composer\Repository\RepositoryManager;
 
 class RuleSymlinkDepsOfDeps extends EmptyRule {
 

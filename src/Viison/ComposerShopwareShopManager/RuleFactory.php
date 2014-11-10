@@ -3,6 +3,7 @@
 namespace Viison\ComposerShopwareShopManager;
 
 use Composer\Installer\InstallationManager;
+use Composer\Repository\RepositoryManager;
 
 class RuleFactory {
 
