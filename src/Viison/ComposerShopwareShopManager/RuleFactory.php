@@ -23,6 +23,7 @@ class RuleFactory {
             'rule-symlink-deps-of-deps' => function($args)
                 use ($composer)
                 {
+                    echo 'RuleSymlinkDepsOfDeps created.' . "\n";
                     return new RuleSymlinkDepsOfDeps(
                         $args,
                         $composer->getInstallationManager(),
@@ -31,6 +32,7 @@ class RuleFactory {
             'rule-add-installer' => function($args)
                 use ($composer, $io, $filesystem)
                 {
+                    echo 'RuleAddInstaller created.' . "\n";
                     return new RuleAddInstaller(
                         $args,
                         $composer,
