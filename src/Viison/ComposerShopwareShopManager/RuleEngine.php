@@ -61,6 +61,8 @@ class RuleEngine {
             {
                 if ($rule->canGetInstallPath($rootPackage, $package, $mainInstaller))
                     return $rule->getInstallPath($prevResult, $rootPackage, $package, $mainInstaller);
+                else
+                    return $prevResult;
             });
 
         if ($result instanceof RuleResultWithValue)
