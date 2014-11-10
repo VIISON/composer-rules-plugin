@@ -8,6 +8,7 @@ use Composer\Installer\InstallerInterface;
 use Composer\IO\IOInterface;
 use Composer\Composer;
 use Composer\Util\Filesystem;
+use Composer\DependencyResolver\Operation\InstallOperation;
 
 class RuleSymlinkDepsOfDeps extends EmptyRule {
 
@@ -66,6 +67,10 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             return;
         }
 
+        /* We do not only install symlinks for $package, but for every
+         * package we know about, unless the package is not installed yet.
+         */
+
         // FIXME: Check innerDeps are actually dependencies of $package.
         foreach ($matchInnerDeps as $matchInnerDep) {
             $innerDeps = $this->composer->getRepositoryManager()
@@ -100,7 +105,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         foreach ($symlinkDests as $symlinkDest)
             try {
-                $this->createSymlink($symlinkDest, $innerDir);
+                $this->createSymlink($symlinkDest, $innerDir,
+                    $outer, $inner, $repo);
             } catch (\Exception $cause) {
                 throw new \Exception('Could not create symlink from '
                     . $innerDir . ' to ' . $symlinkDest . ' for package '
@@ -112,7 +118,9 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             }
     }
 
-    protected function createSymlink($link, $target)
+    protected function createSymlink($link, $target,
+        PackageInterface $linkPackage, PackageInterface $targetPackage,
+        InstalledRepositoryInterface $repo)
     {
         if (file_exists($link)) {
 
@@ -135,8 +143,15 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         }
 
         $linkDir = dirname($link);
-        if (!empty($linkDir))
-            $this->filesystem->ensureDirectoryExists(dirname($link));
+        if (empty($linkDir))
+            $this->composer->getInstallationManager()
+                ->install($repo, new InstallOperation($linkPackage,
+                    __METHOD__ . ' because it needs a link.'));
+
+        if (!is_directory($target))
+            $this->composer->getInstallationManager()
+                ->install($repo, new InstallOperation($targetPackage,
+                    __METHOD__ . ' because it servers a target for a link.'));
 
         $this->filesystem->ensureDirectoryExists(dirname($target));
 
