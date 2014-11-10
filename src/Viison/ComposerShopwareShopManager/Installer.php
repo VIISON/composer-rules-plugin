@@ -117,7 +117,7 @@ class Installer extends LibraryInstaller {
             return $this->ruleEngine;
         $rules = $this->getInstallerRulesConfig();
         $ruleConfig = new RuleConfig($rules);
-        $ruleFactory = new RuleFactory();
+        $ruleFactory = new RuleFactory($this->installationManager);
         return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory);
     }
 
