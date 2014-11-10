@@ -2,9 +2,10 @@
 
 namespace Viison\ComposerShopwareShopManager;
 
-use Composer\Installer\InstallerInterface;
+use Composer\Package\PackageInterface;
+use Composer\Repository\InstalledRepositoryInterface;
 
-class RuleEngine implements InstallerInterface {
+class RuleEngine {
 
     const CONFIG_RULE_NAME = 'rule';
 
