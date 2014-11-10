@@ -134,8 +134,8 @@ class Installer extends LibraryInstaller {
     {
         $this->logMethod(__METHOD__, array($package));
 
-        $rulesEngine = $this->getRulesEngine();
-        $canGetInstallPath = $rulesEngine->canGetInstallPath(
+        $ruleEngine = $this->getRuleEngine();
+        $canGetInstallPath = $ruleEngine->canGetInstallPath(
             $this->getRootPackage(),
             $package,
             $this);
@@ -143,7 +143,7 @@ class Installer extends LibraryInstaller {
         if (!$canGetInstallPath)
             return parent::getInstallPath($package);
 
-        return $rulesEngine->getInstallPath(
+        return $ruleEngine->getInstallPath(
             $this->getRootPackage(),
             $package,
             $this);
