@@ -21,23 +21,18 @@ class RuleFactory {
     {
         $this->map = array(
             'rule-symlink-deps-of-deps' => function($args)
-                use ($composer)
+                use ($composer, $io, $filesystem)
                 {
                     echo 'RuleSymlinkDepsOfDeps created.' . "\n";
                     return new RuleSymlinkDepsOfDeps(
-                        $args,
-                        $composer->getInstallationManager(),
-                        $composer->getRepositoryManager());
+                        $args, $composer, $io, $filesystem);
                 },
             'rule-add-installer' => function($args)
                 use ($composer, $io, $filesystem)
                 {
                     echo 'RuleAddInstaller created.' . "\n";
                     return new RuleAddInstaller(
-                        $args,
-                        $composer,
-                        $io,
-                        $filesystem);
+                        $args, $composer, $io, $filesystem);
                 }
         );
     }

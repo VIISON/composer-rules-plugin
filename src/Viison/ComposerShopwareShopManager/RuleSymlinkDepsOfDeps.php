@@ -21,20 +21,24 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
     protected $params;
 
     /**
-     * @var InstallationManager
+     * @var Composer
      */
-    protected $installationManager;
+    protected $composer;
 
     /**
-     * @var RepositoryManager
+     * @var IOInterface
      */
-    protected $repositoryManager;
+    protected $io;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
 
     use DebugLog;
 
     public function __construct(array $params,
-        InstallationManager $installationManager,
-        RepositoryManager $repositoryManager)
+        Composer $composer, IOInterface $io, Filesystem $filesystem)
     {
         $this->params = $params;
         $this->installationManager = $installationManager;
@@ -63,7 +67,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         // FIXME: Check innerDeps are actually dependencies of $package.
         foreach ($matchInnerDeps as $matchInnerDep) {
-            $innerDeps = $this->repositoryManager->findPackages($matchInnerDep, null);
+            $innerDeps = $this->composer->getRepositoryManager()
+                ->findPackages($matchInnerDep, null);
             if (empty($innerDeps))
                 throw new \Exception('Inner dependency ' . $matchInnerDep
                 . ' of ' . $package->getName() . ' not found');
@@ -79,11 +84,11 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
     {
         $symlinkDestPatterns = $this->params[static::CONFIG_SYMLINK_DESTINATION];
 
-        $innerDir = $this->installationManager->getInstallPath($inner);
+        $innerDir = $this->composer->getInstallationManager()->getInstallPath($inner);
 
         $matchVars = array('%outerdir%');
         $matchReplacements = array(
-            $this->installationManager->getInstallPath($outer)
+            $this->composer->getInstallationManager()->getInstallPath($outer)
         );
 
         $symlinkDests = str_replace($matchVars, $matchReplacements,

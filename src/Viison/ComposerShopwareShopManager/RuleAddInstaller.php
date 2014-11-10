@@ -25,6 +25,16 @@ class RuleAddInstaller extends EmptyRule {
      */
     protected $composer;
 
+    /**
+     * @var IOInterface
+     */
+    protected $io;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
     public function __construct(array $params,
         Composer $composer, IOInterface $io, Filesystem $filesystem)
     {
