@@ -124,6 +124,19 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         PackageInterface $linkPackage, PackageInterface $targetPackage,
         InstalledRepositoryInterface $repo)
     {
+        if (!is_dir($target))
+            $this->composer->getInstallationManager()
+                ->install($repo, new InstallOperation($targetPackage,
+                    __METHOD__ . ' because it servers a target for a link.'));
+
+        if (!is_dir($target))
+            throw new \Exception('Installation of target did not happen at '
+                . $target . '.');
+
+        $targetRealpath = realpath($target);
+        if ($targetRealpath === false)
+            throw new \Exception('No realpath for ' . $target);
+
         if (file_exists($link)) {
 
             if (!is_link($link))
@@ -135,7 +148,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 throw new \Exception('The target of the symbolic link at
                 ' . $link . ' could not be read.');
 
-            if ($oldTarget === $target)
+            // FIXME: Also check without realpath.
+            if (realpath($oldTarget) === $targetRealpath)
                 // Everything is fine, the link is already set up correctly:
                 return;
 
@@ -153,19 +167,6 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         if (!is_dir($linkDir))
             throw new \Exception('Installation of link package did not '
                 . 'happen at ' . $linkDir. '.');
-
-        if (!is_dir($target))
-            $this->composer->getInstallationManager()
-                ->install($repo, new InstallOperation($targetPackage,
-                    __METHOD__ . ' because it servers a target for a link.'));
-
-        if (!is_dir($target))
-            throw new \Exception('Installation of target did not happen at '
-                . $target . '.');
-
-        $targetRealpath = realpath($target);
-        if ($targetRealpath === false)
-            throw new \Exception('No realpath for ' . $target);
 
         $wasCreated = false;
         $cause = null;
