@@ -11,6 +11,8 @@ use Composer\Util\Filesystem;
 
 class RuleAddInstaller extends EmptyRule {
 
+    use DebugLog;
+
     const CONFIG_INSTALLER_CLASS = 'class';
 
     /**
@@ -46,14 +48,16 @@ class RuleAddInstaller extends EmptyRule {
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         $supports = $this->getSubInstaller()->supports($package->getType());
+        $this->logMethodStep(__METHOD__, array($package, $supports));
         return new RuleValueResult($supports);
     }
 
     public function getInstallPath(PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
-        return new RuleValueResult($this->getSubInstaller()
-            ->getInstallPath($package));
+        $installPath = $this->getSubInstaller()->getInstallPath($package);
+        $this->logMethodStep(__METHOD__, array($package, $installPath));
+        return new RuleValueResult($installPath);
     }
 
 }
