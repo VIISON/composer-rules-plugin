@@ -66,13 +66,13 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 . ' of ' . $package->getName() . ' not found');
 
             foreach ($innerDeps as $innerDep)
-                $this->createSymlink($package, $innerDep);
+                $this->createSymlinks($package, $innerDep);
         }
 
         // Now we have to create symlinks for our outer, inner combination.
     }
 
-    protected function createSymlink(PackageInterface $outer, PackageInterface $inner)
+    protected function createSymlinks(PackageInterface $outer, PackageInterface $inner)
     {
         $symlinkDestPatterns = $this->params[static::CONFIG_SYMLINK_DESTINATION];
 
@@ -90,11 +90,42 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             $symlinkDestPatterns));
 
         foreach ($symlinkDests as $symlinkDest)
-            if (!symlink($symlinkDest, $innerDir))
+            try {
+                $this->createSymlink($symlinkDest, $innerDir);
+            } catch (\Exception $cause) {
                 throw new \Exception('Could not create symlink from '
-                    . $innerDir . ' to ' . $symlinkDest . ' for package '
-                    . $outer->getName() . '\'s inner dependency '
-                    . $inner->getName() . ' with rule config = '
-                    . json_encode($this->params));
+                    $innerDir . ' to ' . $symlinkDest . ' for package '
+                    $outer->getName() . '\'s inner dependency '
+                    $inner->getName() . ' with rule config = '
+                .   json_encode($this->params),
+                    $cause);
+            }
+    }
+
+    protected function createSymlink($dest, $src)
+    {
+        if (file_exists($dest)) {
+
+            if (!is_link($dest))
+                throw new \Exception('A file at ' . $dest
+                    . ' already exists and is not a symbolic link.');
+
+            $oldTarget = @readlink($dest);
+            if ($oldTarget === false)
+                throw new \Exception('The target of the symbolic link at
+                ' . $dest . ' could not be read.');
+
+            if ($oldTarget === $src)
+                // Everything is fine, the link is already set up correctly:
+                return;
+
+            throw new \Exception('A symbolic link at ' . $dest
+                . ' already exists. It points to ' . $oldTarget
+                . ' but it should point to ' . $src . '.');
+        }
+
+        if (!symlink($dest, $src))
+            throw new \Exception('Could not create symlink from '
+                    $src. ' to ' . $src);
     }
 }
