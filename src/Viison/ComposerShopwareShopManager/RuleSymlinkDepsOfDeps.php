@@ -51,15 +51,14 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         }
 
         // FIXME: Check innerDeps are actually dependencies of $package.
-        $innerDeps = array();
         foreach ($matchInnerDeps as $matchInnerDep) {
-            $innerDep = $repo->findPackages($matchInnerDep);
-            if (!isset($innerDep))
+            $innerDeps = $repo->findPackages($matchInnerDep);
+            if (empty($innerDep))
                 throw new \Exception('Inner dependency ' . $matchInnerDep
                 . ' of ' . $package->getName() . ' not found');
-            echo "    ### innerDep: ", var_dump($innerDep);
 
-            $this->createSymlink($package, $innerDep);
+            foreach ($innerDeps as $innerDep)
+                $this->createSymlink($package, $innerDep);
         }
 
         // Now we have to create symlinks for our outer, inner combination.
