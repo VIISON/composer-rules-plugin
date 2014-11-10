@@ -41,8 +41,9 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         Composer $composer, IOInterface $io, Filesystem $filesystem)
     {
         $this->params = $params;
-        $this->installationManager = $installationManager;
-        $this->repositoryManager = $repositoryManager;
+        $this->composer = $composer;
+        $this->io = $io;
+        $this->filesystem = $filesystem;
     }
 
     public function postInstall(RuleResult $prevResult,
