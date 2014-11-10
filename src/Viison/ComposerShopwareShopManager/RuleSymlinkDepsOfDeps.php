@@ -125,8 +125,15 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 . ' but it should point to ' . $src . '.');
         }
 
-        if (!@symlink($dest, $src))
+        try {
+            $wasCreated = symlink($dest, $src);
+        } catch (\Exception $cause) {
+        }
+
+        if ($wasCreated === false || isset($cause))
             throw new \Exception('Could not create symlink from '
-                    . $src. ' to ' . $dest);
+                . $src. ' to ' . $dest,
+                0,
+                $cause);
     }
 }
