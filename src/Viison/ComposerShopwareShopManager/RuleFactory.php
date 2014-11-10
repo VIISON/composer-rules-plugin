@@ -5,6 +5,10 @@ namespace Viison\ComposerShopwareShopManager;
 use Composer\Installer\InstallationManager;
 use Composer\Repository\RepositoryManager;
 
+use Composer\IO\IOInterface;
+use Composer\Composer;
+use Composer\Util\Filesystem;
+
 class RuleFactory {
 
     /**
@@ -23,17 +27,26 @@ class RuleFactory {
     protected $repositoryManager;
 
     public function __construct(
-        InstallationManager $installationManager,
-        RepositoryManager $repositoryManager)
+        Composer $composer, IOInterface $io, Filesystem $filesystem)
     {
-        $this->installationManager = $installationManager;
         $this->map = array(
             'rule-symlink-deps-of-deps' => function($args)
-                use ($installationManager, $repositoryManager)
-            {
-                return new RuleSymlinkDepsOfDeps($args, $installationManager,
-                    $repositoryManager);
-            }
+                use ($composer)
+                {
+                    return new RuleSymlinkDepsOfDeps(
+                        $args,
+                        $composer->getInstallationManager(),
+                        $composer->getRepositoryManager());
+                },
+            'rule-add-installer' => function($args)
+                use ($composer, $io, $filesystem)
+                {
+                    return new RuleAddInstaller(
+                        $args,
+                        $composer,
+                        $io,
+                        $filesystem);
+                }
         );
     }
 

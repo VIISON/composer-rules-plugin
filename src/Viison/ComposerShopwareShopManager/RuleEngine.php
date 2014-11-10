@@ -3,9 +3,10 @@
 namespace Viison\ComposerShopwareShopManager;
 
 use Composer\Package\PackageInterface;
+use Composer\Installer\InstallerInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
-class RuleEngine {
+class RuleEngine implements Rule {
 
     const CONFIG_RULE_NAME = 'rule';
 
@@ -33,12 +34,46 @@ class RuleEngine {
 
     public function postInstall(PackageInterface $rootPackage,
         InstalledRepositoryInterface $repo,
-        PackageInterface $package)
+        PackageInterface $package,
+        InstallerInterface $mainInstaller)
     {
         //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
-        $this->onEach(function($rule) use ($rootPackage, $repo, $package) {
-            $rule->postInstall($rootPackage, $repo, $package);
-        });
+        $result = $this->onEach(function($rule)
+            use ($rootPackage, $repo, $package, $mainInstaller)
+            {
+                $rule->postInstall($rootPackage, $repo, $package,
+                    $mainInstaller);
+                return new RuleValueResult(null);
+            });
+
+        if ($result instanceof RuleResultWithValue)
+            return $result->getValue();
+    }
+
+    public function canGetInstallPath(PackageInterface $rootPackage,
+        PackageInterface $package, InstallerInterface $mainInstaller)
+    {
+        $result = $this->onEach(function($rule)
+            use ($rootPackage, $package, $mainInstaller)
+            {
+                return $rule->canGetInstallPath($rootPackage, $package, $mainInstaller);
+            });
+
+        if ($result instanceof RuleResultWithValue)
+            return $result->getValue();
+    }
+
+    public function getInstallPath(PackageInterface $rootPackage,
+        PackageInterface $package, InstallerInterface $mainInstaller)
+    {
+        $result = $this->onEach(function($rule)
+            use ($rootPackage, $package, $mainInstaller)
+            {
+                return $rule->getInstallPath($rootPackage, $package, $mainInstaller);
+            });
+
+        if ($result instanceof RuleResultWithValue)
+            return $result->getValue();
     }
 
     protected function onEach(Callable $do)
@@ -49,8 +84,18 @@ class RuleEngine {
             if (!isset($this->instances[$ruleId]))
                 $this->instances[$ruleId] = $this->factory
                     ->create($ruleName, $ruleConfig);
-            $do($this->instances[$ruleId]);
+            $result = $do($this->instances[$ruleId]);
+
+            if (!($result instanceof RuleResult))
+                throw new \Exception('A rule needs to return a rule result, '
+                    . 'but result = ' . gettype($result) . ' for rule '
+                    . $ruleName . '.');
+
+            if ($result->isFinal())
+                return $result;
         }
+
+        return $result;
     }
 
 }

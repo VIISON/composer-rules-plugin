@@ -7,6 +7,7 @@ use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
+use Composer\Util\Filesystem;
 
 class Installer extends LibraryInstaller {
 
@@ -109,8 +110,7 @@ class Installer extends LibraryInstaller {
         $rules = $this->getInstallerRulesConfig();
         $ruleConfig = new RuleConfig($rules);
         $ruleFactory = new RuleFactory(
-            $this->composer->getInstallationManager(),
-            $this->composer->getRepositoryManager());
+            $this, $this->io, $this->filesystem);
         return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory);
     }
 
@@ -127,7 +127,7 @@ class Installer extends LibraryInstaller {
         $this->logMethod(__METHOD__, array($repo, $package));
         parent::install($repo, $package);
         return $this->getRuleEngine()->postInstall($this->getRootPackage(),
-            $repo, $package);
+            $repo, $package, $this);
     }
 
     public function getInstallPath(PackageInterface $package)
