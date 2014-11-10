@@ -128,7 +128,7 @@ class Installer extends LibraryInstaller {
             return $this->getRuleEngine()->postInstall($this->getRootPackage(),
                 $repo, $package);
         } catch (\Exception $e) {
-            echo $e->toString(), "\n";
+            echo $e, "\n";
             throw $e;
         }
     }
