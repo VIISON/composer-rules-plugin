@@ -84,7 +84,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         );
 
         $symlinkDests = str_replace($matchVars, $matchReplacements,
-            $symlinkDestPattern);
+            $symlinkDestPatterns);
 
         $this->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDests,
             $symlinkDestPatterns));
