@@ -86,7 +86,9 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $symlinkDest = str_replace($matchVars, $matchReplacements,
             $symlinkDestPattern);
 
-        $this->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDest));
+        $this->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDest,
+            $symlinkDestPattern));
+
         if (!symlink($symlinkDest, $innerDir))
             throw new \Exception('Could not create symlink from '
                 . $innerDir . ' to ' . $symlinkDest . ' for package '
