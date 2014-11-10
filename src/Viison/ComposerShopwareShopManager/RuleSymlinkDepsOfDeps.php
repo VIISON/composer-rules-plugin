@@ -21,6 +21,6 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
     public function postInstall(PackageInterface $rootPackage,
         InstalledRepositoryInterface $repo,
         PackageInterface $package) {
-        $this->logMethod(__METHOD__, $rootPackage, $repo, $package);
+        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
     }
 }

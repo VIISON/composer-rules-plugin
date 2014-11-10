@@ -102,11 +102,6 @@ class Installer extends LibraryInstaller {
         return true;
     }
 
-    protected function matchRulesForPackage()
-    {
-
-    }
-
     protected function getRuleEngine()
     {
         if (isset($this->ruleEngine))
@@ -119,14 +114,14 @@ class Installer extends LibraryInstaller {
     public function isInstalled(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, $repo, $package);
+        $this->logMethod(__METHOD__, array($repo, $package));
         return parent::isInstalled($repo, $package);
     }
 
     public function install(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, $repo, $package);
+        $this->logMethod(__METHOD__, array($repo, $package));
         parent::install($repo, $package);
         return $this->getRuleEngine()->postInstall($this->getRootPackage(),
             $repo, $package);
