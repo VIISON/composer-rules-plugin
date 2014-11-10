@@ -5,7 +5,12 @@ class RuleConfig {
     /**
      * @var array The extra.vision-installer.rules configuration array.
      */
-    private $ruleConfig = array();
+    private $ruleConfig;
+
+    public function __construct(array $ruleConfig = array())
+    {
+        $this->set($ruleConfig);
+    }
 
     public function set(array $ruleConfig)
     {

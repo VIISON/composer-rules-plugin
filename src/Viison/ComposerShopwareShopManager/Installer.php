@@ -10,12 +10,19 @@ use Composer\Repository\InstalledRepositoryInterface;
 
 class Installer extends LibraryInstaller {
 
+    use DebugLog;
+
     const CONFIG_VIISON_INSTALLER_KEY = 'viison-installer';
     const CONFIG_ROOT_DIR = 'root-dir';
     const CONFIG_AS_ROOT = 'as-root';
     const CONFIG_FALLBACK = 'fallback';
 
     const CONFIG_RULES = 'rules';
+
+    /**
+     * @var RuleEngine
+     */
+    private $ruleEngine;
 
     public function __construct(
         IOInterface $io,
@@ -95,10 +102,27 @@ class Installer extends LibraryInstaller {
         return true;
     }
 
-    protected function constructRules(PackageInterface $package)
+    protected function matchRulesForPackage()
     {
-        $rules = array();
-        return $this->getInstallerRulesConfig();
+
+    }
+
+    protected function getRuleEngine()
+    {
+        if (isset($this->ruleEngine))
+            return $this->ruleEngine;
+        $rules = $this->getInstallerRulesConfig();
+        $ruleConfig = new RuleConfig($rules);
+        return $this->ruleEngine = new RuleEngine($ruleConfig);
+    }
+
+    public function install(InstalledRepositoryInterface $repo,
+        PackageInterface $package)
+    {
+        $this->logMethod(__METHOD__, $repo, $package);
+        parent::install($repo, $package);
+        return $this->getRuleEngine()->postInstall($this->getRootPackage(),
+            $repo, $package);
     }
 
     public function getInstallPath(PackageInterface $package)
