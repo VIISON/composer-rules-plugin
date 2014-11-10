@@ -98,6 +98,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                     . $outer->getName() . '\'s inner dependency '
                     . $inner->getName() . ' with rule config = '
                     . json_encode($this->params),
+                    0,
                     $cause);
             }
     }
