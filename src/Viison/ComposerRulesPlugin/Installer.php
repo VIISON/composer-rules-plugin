@@ -30,6 +30,8 @@ class Installer extends LibraryInstaller {
         Composer $composer,
         Filesystem $filesystem = null)
     {
+        $this->logMethod(__METHOD__, array());
+        echo '#######################################################', "\n\n";
         parent::__construct($io, $composer, null, $filesystem);
         $this->checkConfig();
     }
