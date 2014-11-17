@@ -201,7 +201,9 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         if ($wasCreated === false || isset($cause))
             throw new \Exception('Could not create symlink to '
-                . $target. ' at ' . $link,
+                . $target. ' at ' . $link
+                . '. Attempted to `ln -s ' . $relativeTarget . ' '
+                . $link . '`',
                 0,
                 $cause);
     }
@@ -217,10 +219,19 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         $absoluteLinkDir = $realLinkDir . DIRECTORY_SEPARATOR . basename($link);
 
+        // Prevent empty parts:
+        $absoluteLinkDir = preg_replace(
+            ',' . DIRECTORY_SEPARATOR . '*$,u', '', $absoluteLinkDir);
+        $absoluteTarget = preg_replace(
+            ',' . DIRECTORY_SEPARATOR . '*$,u', '', $absoluteTarget);
+
         $targetParts = explode(DIRECTORY_SEPARATOR, $absoluteTarget);
         $linkDirParts = explode(DIRECTORY_SEPARATOR, $absoluteLinkDir);
 
-        $minLength = min(count($targetParts), count($linkDirParts));
+        $targetPartsCount = count($targetParts);
+        $linkDirPartsCount = count($linkPartsDirParts);
+
+        $minLength = min($targetPartsCount, $linkDirPartsCount);
 
         $matchingParts = 0;
         for ($i = 0; $i < $minLength; $i++) {
@@ -237,12 +248,12 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         // link dir:   /a/b/e
         // rel target: ../c/d
 
-        $unmatchingParts = count($linkDirParts) - $matchingParts;
+        $unmatchingParts = $linkDirPartsCount - $matchingParts;
 
         $up = str_repeat('..' . DIRECTORY_SEPARATOR, $unmatchingParts);
 
         $down = '';
-        for ($i = $matchingParts; $i < count($targetParts); $i++)
+        for ($i = $matchingParts; $i < $targetPartsCount; $i++)
             $down .= $targetParts[$i] . DIRECTORY_SEPARATOR;
 
         return $up . $down;
