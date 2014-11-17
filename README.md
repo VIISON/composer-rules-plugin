@@ -161,5 +161,6 @@ Caveats
 
 License
 -------
-composer-rules-plugin is licensed under the MIT License - see the LICENSE file
-for details.
+
+`VIISON/composer-rules-plugin` is licensed under the MIT License - see the
+LICENSE file for details.
