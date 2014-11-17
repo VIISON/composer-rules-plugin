@@ -59,7 +59,7 @@ class RuleAddInstaller extends EmptyRule {
     {
         $supports = $this->getSubInstaller()->supports($package->getType());
         $this->logMethodStep(__METHOD__, array($package, $supports));
-        return new RuleValueResult($supports);
+        return $supports;
     }
 
     public function getInstallPath(RuleResult $prevResult,
