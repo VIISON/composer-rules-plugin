@@ -58,7 +58,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         PackageInterface $package,
         InstallerInterface $mainInstaller)
     {
-        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package,
+        $this->logMethod(__METHOD__, array($package->getPrettyName(),
             $this->params));
 
         // FIXME: Composer seems to have some normalization rules ... Check.
