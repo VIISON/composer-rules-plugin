@@ -37,7 +37,7 @@ class RuleEngine {
         PackageInterface $package,
         InstallerInterface $mainInstaller)
     {
-        //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
+        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
         $result = $this->onEach(function($rule, $prevResult)
             use ($rootPackage, $repo, $package, $mainInstaller)
             {

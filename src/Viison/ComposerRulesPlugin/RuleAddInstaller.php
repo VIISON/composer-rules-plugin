@@ -58,7 +58,7 @@ class RuleAddInstaller extends EmptyRule {
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         $supports = $this->getSubInstaller()->supports($package->getType());
-        $this->logMethodStep(__METHOD__, array($package, $supports));
+        //$this->logMethodStep(__METHOD__, array($package, $supports));
         return $supports;
     }
 
@@ -67,7 +67,7 @@ class RuleAddInstaller extends EmptyRule {
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         $installPath = $this->getSubInstaller()->getInstallPath($package);
-        $this->logMethodStep(__METHOD__, array($package, $installPath));
+        //$this->logMethodStep(__METHOD__, array($package, $installPath));
         return new RuleValueResult($installPath);
     }
 

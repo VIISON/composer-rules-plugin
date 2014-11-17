@@ -58,8 +58,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         PackageInterface $package,
         InstallerInterface $mainInstaller)
     {
-        //$this->logMethod(__METHOD__, array($rootPackage, $repo, $package,
-        //    $this->params));
+        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package,
+            $this->params));
 
         // FIXME: Composer seems to have some normalization rules ... Check.
         $matchOuterDeps = array_map(array($this, 'normalizePkgName'),
@@ -74,6 +74,10 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 $matchOuterDeps));
             return;
         }
+
+        $this->logMethodStep(__METHOD__, array('Matched: '
+            . $package->getName() . ' with matches: ',
+            $matchOuterDeps));
 
         /* We do not only install symlinks for $package, but for every
          * package we know about, unless the package is not installed yet.
