@@ -198,10 +198,15 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             throw new \Exception('Could not change to directory '
                 . $linkDir . ' to create a symbolic link in it.');
 
+        $linkFile = basename($link);
         $wasCreated = false;
         $cause = null;
         try {
-            $wasCreated = symlink($relativeTarget, basename($link));
+            if (!file_exists($relativeTarget))
+                throw new \Exception('In ' . $linkDir
+                    . ', ' . $relativeTarget . ' does not exist.');
+
+            $wasCreated = symlink($relativeTarget, $linkFile);
         } catch (\Exception $cause) {
         }
 
@@ -214,7 +219,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 . $target. ' at ' . $link
                 . '. Attempted to `cd ' . $linkDir
                 . ' && ln -s ' . $relativeTarget . ' '
-                . $link . '`',
+                . $linkFile . '`',
                 0,
                 $cause);
     }
