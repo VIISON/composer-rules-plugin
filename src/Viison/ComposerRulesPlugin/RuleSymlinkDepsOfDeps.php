@@ -192,12 +192,22 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         $relativeTarget = $this->getRelativeTarget($targetRealpath, $link);
 
+        $currentDir = getcwd();
+
+        if (!chdir($linkDir))
+            throw new \Exception('Could not change to directory '
+                . $linkDir . ' to create a symbolic link in it.');
+
         $wasCreated = false;
         $cause = null;
         try {
             $wasCreated = symlink($relativeTarget, $link);
         } catch (\Exception $cause) {
         }
+
+        if (!chdir($currentDir))
+            throw new \Exception('Could not change back to directory '
+                . $currentDir);
 
         if ($wasCreated === false || isset($cause))
             throw new \Exception('Could not create symlink to '
@@ -211,19 +221,36 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
     /**
      * @todo Probably broken on Windows: No support for drive letters
      */
-    protected function getRelativeTarget($absoluteTarget, $link)
+    protectedfunction getRelativeTarget($absoluteTarget, $link)
     {
+        // Prevent empty parts:
+        $link = preg_replace(
+            ',' . DIRECTORY_SEPARATOR . '+$,u', '', $link);
+        $link = preg_replace(
+            ',' . DIRECTORY_SEPARATOR . '+,u',
+            DIRECTORY_SEPARATOR,
+            $link);
+
         $realLinkDir = realpath(dirname($link));
         if (empty($realLinkDir))
             throw new \Exception('Could not find the realpath for ' . $link);
 
-        $absoluteLinkDir = $realLinkDir . DIRECTORY_SEPARATOR . basename($link);
+        $absoluteLinkDir = $realLinkDir;
 
         // Prevent empty parts:
         $absoluteLinkDir = preg_replace(
-            ',' . DIRECTORY_SEPARATOR . '*$,u', '', $absoluteLinkDir);
+            ',' . DIRECTORY_SEPARATOR . '+$,u', '', $absoluteLinkDir);
         $absoluteTarget = preg_replace(
-            ',' . DIRECTORY_SEPARATOR . '*$,u', '', $absoluteTarget);
+            ',' . DIRECTORY_SEPARATOR . '+$,u', '', $absoluteTarget);
+
+        $absoluteLinkDir = preg_replace(
+            ',' . DIRECTORY_SEPARATOR . '+,u',
+            DIRECTORY_SEPARATOR,
+            $absoluteLinkDir);
+        $absoluteTarget = preg_replace(
+            ',' . DIRECTORY_SEPARATOR . '+$,u',
+            DIRECTORY_SEPARATOR,
+            $absoluteTarget);
 
         $targetParts = explode(DIRECTORY_SEPARATOR, $absoluteTarget);
         $linkDirParts = explode(DIRECTORY_SEPARATOR, $absoluteLinkDir);
@@ -256,7 +283,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         for ($i = $matchingParts; $i < $targetPartsCount; $i++)
             $down .= $targetParts[$i] . DIRECTORY_SEPARATOR;
 
-        return $up . $down;
+        $linkFile = basename($link);
+        return $up . $down . $linkFile;
     }
 
 }
