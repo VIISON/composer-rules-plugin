@@ -221,7 +221,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
     /**
      * @todo Probably broken on Windows: No support for drive letters
      */
-    protectedfunction getRelativeTarget($absoluteTarget, $link)
+    protected function getRelativeTarget($absoluteTarget, $link)
     {
         // Prevent empty parts:
         $link = preg_replace(
