@@ -25,7 +25,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
         );
     }
 
-    public function onCommand(Composer\Plugin\CommandEvent $event)
+    public function onCommand(\Composer\Plugin\CommandEvent $event)
     {
         echo __METHOD__, ' ', $event->getCommandName(), " ################ \n";
     }
