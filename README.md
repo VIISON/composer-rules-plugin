@@ -138,9 +138,9 @@ rule-symlink-deps-of-deps
 
     In the above example, `dep/a` is a direct dependency of the root project.
     `dep/b` is a dependency of `dep/a`. The `symlink-dest` parameters defines
-    that in the directory of the _outer_ dependency (`%outerdir%`), a symbolic
-    link will be created named `symlink-to-b-inside-a`, with the location
-    of `dep/b` as its target.
+    that in the directory of the _outer_ dependency (`%outerdir%`), an
+    absolute symbolic link will be created named `symlink-to-b-inside-a`, with
+    the location of `dep/b` as its target.
 
 Supported hooks
 ---------------
