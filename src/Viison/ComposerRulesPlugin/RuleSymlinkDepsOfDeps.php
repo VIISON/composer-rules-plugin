@@ -212,7 +212,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         if ($wasCreated === false || isset($cause))
             throw new \Exception('Could not create symlink to '
                 . $target. ' at ' . $link
-                . '. Attempted to `ln -s ' . $relativeTarget . ' '
+                . '. Attempted to `cd ' . $linkDir
+                . ' && ln -s ' . $relativeTarget . ' '
                 . $link . '`',
                 0,
                 $cause);
