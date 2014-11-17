@@ -130,6 +130,39 @@ class Installer extends LibraryInstaller {
             $repo, $package, $this);
     }
 
+    public function update(InstalledRepositoryInterface $repo,
+        PackageInterface $initial, PackageInterface $target)
+    {
+        $this->logMethod(__METHOD__, array($repo, $initial, $target));
+        return parent::update($repo, $initial, $target);
+    }
+
+    public function uninstall(InstalledRepositoryInterface $repo,
+        PackageInterface $package)
+    {
+        $this->logMethod(__METHOD__, array($repo, $package));
+        return parent::uninstall($repo, $package);
+    }
+
+    protected function installCode(PackageInterface $package)
+    {
+        $this->logMethod(__METHOD__, array($package));
+        return parent::installCode($package);
+    }
+
+    protected function updateCode(PackageInterface $initial,
+        PackageInterface $target)
+    {
+        $this->logMethod(__METHOD__, array($initial, $target));
+        return parent::updateCode($initial, $target);
+    }
+
+    protected function removeCode(PackageInterface $package)
+    {
+        $this->logMethod(__METHOD__, array($package));
+        return parent::removeCode($package);
+    }
+
     public function getInstallPath(PackageInterface $package)
     {
         $this->logMethod(__METHOD__, array($package));
