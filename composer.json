@@ -1,5 +1,5 @@
 {
-    "name": "viison/composer-shopware-shop-manager",
+    "name": "VIISON/composer-rules-plugin",
     "type": "composer-plugin",
     "require": {
         "composer-plugin-api": "1.0.0",
