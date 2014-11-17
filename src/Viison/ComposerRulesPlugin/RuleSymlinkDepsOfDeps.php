@@ -243,7 +243,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         $down = '';
         for ($i = $matchingParts; $i < count($targetParts); $i++)
-            $down .= $targetParts . DIRECTORY_SEPARATOR;
+            $down .= $targetParts[$i] . DIRECTORY_SEPARATOR;
 
         return $up . $down;
     }
