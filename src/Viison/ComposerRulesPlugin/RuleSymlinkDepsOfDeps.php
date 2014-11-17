@@ -153,7 +153,9 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
             if (!is_link($link))
                 throw new \Exception('A file at ' . $link
-                    . ' already exists and is not a symbolic link.');
+                    . ' already exists and is not a symbolic link. '
+                    . '(stat = '
+                    . json_encode(stat($link), JSON_PRETTY_PRINT) . ')');
 
             $oldTarget = @readlink($link);
             if ($oldTarget === false)
