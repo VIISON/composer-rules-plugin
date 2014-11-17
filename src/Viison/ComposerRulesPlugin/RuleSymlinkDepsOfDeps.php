@@ -67,8 +67,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $matchInnerDeps = array_map(array($this, 'normalizePkgName'),
             $this->params[static::CONFIG_MATCH_INNER_DEPS]);
 
-        if (!in_array($this->normalizePkgName($package->getName(),
-                      $matchOuterDeps, true))) {
+        if (!in_array($this->normalizePkgName($package->getName()),
+                      $matchOuterDeps, true)) {
             $this->logMethodStep(__METHOD__, array('Not matched: '
                 . $package->getName() . ' with matches: ',
                 $matchOuterDeps));
