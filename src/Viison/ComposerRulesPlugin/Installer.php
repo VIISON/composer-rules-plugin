@@ -13,7 +13,7 @@ class Installer extends LibraryInstaller {
 
     use DebugLog;
 
-    const CONFIG_VIISON_INSTALLER_KEY = 'viison-installer';
+    const CONFIG_VIISON_INSTALLER_KEY = 'composer-rules-plugin';
     const CONFIG_ROOT_DIR = 'root-dir';
     const CONFIG_AS_ROOT = 'as-root';
     const CONFIG_FALLBACK = 'fallback';

@@ -37,7 +37,7 @@ Usage:
     ```javascript
         ...
         "extra": {
-            "viison-installer": {
+            "composer-rules-plugin": {
                 "rules": [
                     {
                         "rule": "rule-add-installer",
@@ -95,7 +95,7 @@ rule-add-installer
         },
         ...
         "extra": {
-            "viison-installer": {
+            "composer-rules-plugin": {
                 "rules": [
                     {
                         "rule": "rule-add-installer",
@@ -122,7 +122,7 @@ rule-symlink-deps-of-deps
         },
         ...
         "extra": {
-            "viison-installer": {
+            "composer-rules-plugin": {
                 "rules": [
                     {
                         "rule": "rule-symlink-deps-of-deps",
