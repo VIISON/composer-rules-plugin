@@ -171,10 +171,14 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         }
 
         $linkDir = dirname($link);
-        if (!is_dir($linkDir))
+        if (!is_dir($linkDir)) {
+            $this->logMethodStep(__METHOD__, array($package->getPrettyName(),
+                'Installing ' . $linkPackage->getPrettyName()
+                . ' because it is need as a link target.'));
             $this->composer->getInstallationManager()
                 ->install($repo, new InstallOperation($linkPackage,
                     __METHOD__ . ' because it needs a link.'));
+        }
 
         if (!is_dir($linkDir))
             throw new \Exception('Installation of link package did not '
