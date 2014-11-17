@@ -167,7 +167,7 @@ class Installer extends LibraryInstaller {
 
     public function getInstallPath(PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($package));
+        //$this->logMethod(__METHOD__, array($package));
 
         $ruleEngine = $this->getRuleEngine();
 
