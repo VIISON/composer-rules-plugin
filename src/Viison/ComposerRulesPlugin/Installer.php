@@ -11,8 +11,6 @@ use Composer\Util\Filesystem;
 
 class Installer extends LibraryInstaller {
 
-    use DebugLog;
-
     const CONFIG_VIISON_INSTALLER_KEY = 'composer-rules-plugin';
     const CONFIG_ROOT_DIR = 'root-dir';
     const CONFIG_AS_ROOT = 'as-root';
@@ -25,13 +23,19 @@ class Installer extends LibraryInstaller {
      */
     private $ruleEngine;
 
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
     public function __construct(
         IOInterface $io,
         Composer $composer,
-        Filesystem $filesystem = null)
+        Filesystem $filesystem = null,
+        Logger $logger)
     {
-        $this->logMethod(__METHOD__, array());
-        echo '#######################################################', "\n\n";
+        $this->logger = $logger;
+        $this->logger->logMethod(__METHOD__, array());
         parent::__construct($io, $composer, null, $filesystem);
         $this->checkConfig();
     }
@@ -113,20 +117,21 @@ class Installer extends LibraryInstaller {
         $ruleConfig = new RuleConfig($rules);
         $ruleFactory = new RuleFactory(
             $this->composer, $this->io, $this->filesystem);
-        return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory);
+        return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory,
+            $this->logger);
     }
 
     public function isInstalled(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($repo, $package));
+        $this->logger->logMethod(__METHOD__, array($repo, $package));
         return parent::isInstalled($repo, $package);
     }
 
     public function install(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($repo, $package));
+        $this->logger->logMethod(__METHOD__, array($repo, $package));
         parent::install($repo, $package);
         return $this->getRuleEngine()->postInstall($this->getRootPackage(),
             $repo, $package, $this);
@@ -135,39 +140,39 @@ class Installer extends LibraryInstaller {
     public function update(InstalledRepositoryInterface $repo,
         PackageInterface $initial, PackageInterface $target)
     {
-        $this->logMethod(__METHOD__, array($repo, $initial, $target));
+        $this->logger->logMethod(__METHOD__, array($repo, $initial, $target));
         return parent::update($repo, $initial, $target);
     }
 
     public function uninstall(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($repo, $package));
+        $this->logger->logMethod(__METHOD__, array($repo, $package));
         return parent::uninstall($repo, $package);
     }
 
     protected function installCode(PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($package));
+        $this->logger->logMethod(__METHOD__, array($package));
         return parent::installCode($package);
     }
 
     protected function updateCode(PackageInterface $initial,
         PackageInterface $target)
     {
-        $this->logMethod(__METHOD__, array($initial, $target));
+        $this->logger->logMethod(__METHOD__, array($initial, $target));
         return parent::updateCode($initial, $target);
     }
 
     protected function removeCode(PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($package));
+        $this->logger->logMethod(__METHOD__, array($package));
         return parent::removeCode($package);
     }
 
     public function getInstallPath(PackageInterface $package)
     {
-        $this->logMethod(__METHOD__, array($package));
+        $this->logger->logMethod(__METHOD__, array($package));
         //$e = new \Exception();
         //echo str_replace("\n", "        \n", $e), "\n\n\n";
 

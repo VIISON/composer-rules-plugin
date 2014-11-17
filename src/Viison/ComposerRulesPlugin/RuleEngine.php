@@ -10,8 +10,6 @@ class RuleEngine {
 
     const CONFIG_RULE_NAME = 'rule';
 
-    use DebugLog;
-
     /**
      * @var RuleConfig
      */
@@ -23,13 +21,20 @@ class RuleEngine {
     protected $factory;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * @var array int => Rule, corresponding to the config entries.
      */
     protected $instances = array();
 
-    public function __construct(RuleConfig $config, RuleFactory $factory) {
+    public function __construct(RuleConfig $config, RuleFactory $factory,
+        Logger $logger) {
         $this->config = $config;
         $this->factory = $factory;
+        $this->logger = $logger;
     }
 
     public function postInstall(PackageInterface $rootPackage,
@@ -37,7 +42,8 @@ class RuleEngine {
         PackageInterface $package,
         InstallerInterface $mainInstaller)
     {
-        $this->logMethod(__METHOD__, array($rootPackage, $repo, $package));
+        $this->logger->logMethod(__METHOD__,
+            array($rootPackage, $repo, $package));
         $result = $this->onEach(function($rule, $prevResult)
             use ($rootPackage, $repo, $package, $mainInstaller)
             {

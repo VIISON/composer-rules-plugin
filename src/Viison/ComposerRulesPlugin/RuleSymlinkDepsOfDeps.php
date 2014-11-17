@@ -36,7 +36,10 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
      */
     protected $filesystem;
 
-    use DebugLog;
+    /**
+     * @var Logger
+     */
+    protected $logger;
 
     public function __construct(array $params,
         Composer $composer, IOInterface $io, Filesystem $filesystem)
@@ -45,6 +48,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $this->composer = $composer;
         $this->io = $io;
         $this->filesystem = $filesystem;
+        $this->logger = new Logger($io); // FIXME: Should use singleton.
     }
 
     protected function normalizePkgName($name)
@@ -58,7 +62,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         PackageInterface $package,
         InstallerInterface $mainInstaller)
     {
-        $this->logMethod(__METHOD__, array($package->getPrettyName(),
+        $this->logger->logMethod(__METHOD__, array($package->getPrettyName(),
             $this->params));
 
         // FIXME: Composer seems to have some normalization rules ... Check.
@@ -69,13 +73,13 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         if (!in_array($this->normalizePkgName($package->getName()),
                       $matchOuterDeps, true)) {
-            $this->logMethodStep(__METHOD__, array('Not matched: '
+            $this->logger->logMethodStep(__METHOD__, array('Not matched: '
                 . $package->getName() . ' with matches: ',
                 $matchOuterDeps));
             return;
         }
 
-        $this->logMethodStep(__METHOD__, array('Matched: '
+        $this->logger->logMethodStep(__METHOD__, array('Matched: '
             . $package->getName() . ' with matches: ',
             $matchOuterDeps));
 
@@ -114,7 +118,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $symlinkDests = str_replace($matchVars, $matchReplacements,
             $symlinkDestPatterns);
 
-        $this->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDests,
+        $this->logger->logMethodStep(__METHOD__, array($inner, $outer, $symlinkDests,
             $symlinkDestPatterns));
 
         foreach ($symlinkDests as $symlinkDest)
@@ -174,7 +178,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
         $linkDir = dirname($link);
         if (!is_dir($linkDir)) {
-            $this->logMethodStep(__METHOD__, array($package->getPrettyName(),
+            $this->logger->logMethodStep(__METHOD__, array($package->getPrettyName(),
                 'Installing ' . $linkPackage->getPrettyName()
                 . ' because it is need as a link target.'));
             $this->composer->getInstallationManager()
