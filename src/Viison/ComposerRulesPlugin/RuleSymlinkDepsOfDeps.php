@@ -190,10 +190,12 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             throw new \Exception('Installation of link package did not '
                 . 'happen at ' . $linkDir. '.');
 
+        $relativeTarget = $this->getRelativeTarget($targetRealpath, $link);
+
         $wasCreated = false;
         $cause = null;
         try {
-            $wasCreated = symlink($targetRealpath, $link);
+            $wasCreated = symlink($relativeTarget, $link);
         } catch (\Exception $cause) {
         }
 
@@ -203,4 +205,47 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 0,
                 $cause);
     }
+
+    /**
+     * @todo Probably broken on Windows: No support for drive letters
+     */
+    protected function getRelativeTarget($absoluteTarget, $link)
+    {
+        $realLinkDir = realpath(dirname($link));
+        if (empty($realLinkDir))
+            throw new \Exception('Could not find the realpath for ' . $link);
+
+        $absoluteLinkDir = $realLinkDir . DIRECTORY_SEPARATOR . basename($link);
+
+        $targetParts = explode(DIRECTORY_SEPARATOR, $absoluteTarget);
+        $linkDirParts = explode(DIRECTORY_SEPARATOR, $absoluteLinkDir);
+
+        $minLength = min(count($targetParts), count($linkDirParts));
+
+        $matchingParts = 0;
+        for ($i = 0; $i < $minLength; $i++) {
+            if ($targetParts[$i] === $linkDirParts[$i]) {
+                $matchingParts = $i + 1;
+                continue;
+            }
+            break;
+        }
+
+        // Example:
+        // target:     /a/b/c/d
+        // link:       /a/b/e/f
+        // link dir:   /a/b/e
+        // rel target: ../c/d
+
+        $unmatchingParts = count($linkDirParts) - $matchingParts;
+
+        $up = str_repeat('..' . DIRECTORY_SEPARATOR, $unmatchingParts);
+
+        $down = '';
+        for ($i = $matchingParts; $i < count($targetParts); $i++)
+            $down .= $targetParts . DIRECTORY_SEPARATOR;
+
+        return $up . $down;
+    }
+
 }
