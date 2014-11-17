@@ -146,7 +146,7 @@ Supported hooks
 ---------------
 
 Rules must implement the [Rule
-interface](src/Viison/ComposerShopwareShopManager/Rule.php) and can then
+interface](src/Viison/ComposerRulesPlugin/Rule.php) and can then
 manipulate dependencies' installation paths and execute actions after a
 dependency has been installed.
 

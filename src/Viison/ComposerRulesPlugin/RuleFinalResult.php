@@ -1,8 +1,8 @@
 <?php
 
-namespace Viison\ComposerShopwareShopManager;
+namespace Viison\ComposerRulesPlugin;
 
-class RuleValueResult implements RuleResultWithValue {
+class RuleFinalResult implements RuleResultWithValue {
     private $value;
 
     public function __construct($value)
@@ -17,6 +17,6 @@ class RuleValueResult implements RuleResultWithValue {
 
     public function isFinal()
     {
-        return false;
+        return true;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Viison\ComposerShopwareShopManager;
+namespace Viison\ComposerRulesPlugin;
 
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;

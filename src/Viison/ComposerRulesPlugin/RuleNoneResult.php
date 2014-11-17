@@ -1,6 +1,6 @@
 <?php
 
-namespace Viison\ComposerShopwareShopManager;
+namespace Viison\ComposerRulesPlugin;
 
 class RuleNoneResult implements RuleResult {
     public function isFinal()

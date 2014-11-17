@@ -1,6 +1,6 @@
 <?php
 
-namespace Viison\ComposerShopwareShopManager;
+namespace Viison\ComposerRulesPlugin;
 
 interface RuleResultWithValue extends RuleResult {
 
