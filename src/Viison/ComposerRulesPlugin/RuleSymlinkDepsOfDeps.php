@@ -166,8 +166,12 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
                 throw new \Exception('The target of the symbolic link at
                 ' . $link . ' could not be read.');
 
+            $currentDir = getcwd();
+            chdir(dirname($link)); // FIXME: Error check
+            $realOldTarget = realpath($oldTarget);
+            chdir($currentDir); // FIXME: Error check
             // FIXME: Also check without realpath.
-            if (realpath($oldTarget) === $targetRealpath)
+            if ($realOldTarget === $targetRealpath)
                 // Everything is fine, the link is already set up correctly:
                 return;
 
