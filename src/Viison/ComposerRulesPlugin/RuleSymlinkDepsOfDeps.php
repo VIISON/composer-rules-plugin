@@ -229,7 +229,7 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $linkDirParts = explode(DIRECTORY_SEPARATOR, $absoluteLinkDir);
 
         $targetPartsCount = count($targetParts);
-        $linkDirPartsCount = count($linkPartsDir);
+        $linkDirPartsCount = count($linkDirParts);
 
         $minLength = min($targetPartsCount, $linkDirPartsCount);
 
