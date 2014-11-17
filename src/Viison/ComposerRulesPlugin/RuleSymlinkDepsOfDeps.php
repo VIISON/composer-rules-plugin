@@ -229,6 +229,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
      */
     protected function getRelativeTarget($absoluteTarget, $link)
     {
+        echo 'a0 ', $link, ' <- ', $absoluteTarget, "\n";
+
         // Prevent empty parts:
         $link = preg_replace(
             ',' . DIRECTORY_SEPARATOR . '+$,u', '', $link);
@@ -241,13 +243,19 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         if (empty($realLinkDir))
             throw new \Exception('Could not find the realpath for ' . $link);
 
+        echo 'ax ', $realLinkDir, ' <- ', $absoluteTarget, "\n";
+
         $absoluteLinkDir = $realLinkDir;
+
+        echo 'a1 ', $absoluteLinkDir, ' <- ', $absoluteTarget, "\n";
 
         // Prevent empty parts:
         $absoluteLinkDir = preg_replace(
             ',' . DIRECTORY_SEPARATOR . '+$,u', '', $absoluteLinkDir);
         $absoluteTarget = preg_replace(
             ',' . DIRECTORY_SEPARATOR . '+$,u', '', $absoluteTarget);
+
+        echo 'a2 ', $absoluteLinkDir, ' <- ', $absoluteTarget, "\n";
 
         $absoluteLinkDir = preg_replace(
             ',' . DIRECTORY_SEPARATOR . '+,u',
@@ -258,8 +266,12 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
             DIRECTORY_SEPARATOR,
             $absoluteTarget);
 
+        echo 'a3 ', $absoluteLinkDir, ' <- ', $absoluteTarget, "\n";
+
         $targetParts = explode(DIRECTORY_SEPARATOR, $absoluteTarget);
         $linkDirParts = explode(DIRECTORY_SEPARATOR, $absoluteLinkDir);
+
+        echo 'a4 ', json_encode($linkDirParts), ' <- ', json_encode($targetParts), "\n";
 
         $targetPartsCount = count($targetParts);
         $linkDirPartsCount = count($linkDirParts);
@@ -282,6 +294,8 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         // rel target: ../c/d
 
         $unmatchingParts = $linkDirPartsCount - $matchingParts;
+        echo 'a5 $unmatchingParts = $linkDirPartsCount - $matchingParts = '
+            . "$unmatchingParts = $linkDirPartsCount - $matchingParts\n";
 
         $up = str_repeat('..' . DIRECTORY_SEPARATOR, $unmatchingParts);
 
