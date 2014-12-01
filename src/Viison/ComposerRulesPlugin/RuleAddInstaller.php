@@ -3,14 +3,13 @@
 namespace Viison\ComposerRulesPlugin;
 
 use Composer\Package\PackageInterface;
-use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Installer\InstallerInterface;
 use Composer\IO\IOInterface;
 use Composer\Composer;
 use Composer\Util\Filesystem;
 
-class RuleAddInstaller extends EmptyRule {
-
+class RuleAddInstaller extends EmptyRule
+{
     const CONFIG_INSTALLER_CLASS = 'class';
 
     /**
@@ -44,10 +43,12 @@ class RuleAddInstaller extends EmptyRule {
 
     protected function getSubInstaller()
     {
-        if (isset($this->subInstaller))
+        if (isset($this->subInstaller)) {
             return $this->subInstaller;
+        }
 
         $className = $this->params[static::CONFIG_INSTALLER_CLASS];
+
         return $this->subInstaller = new $className(
             $this->io, $this->composer, null, $this->filesystem);
     }
@@ -56,6 +57,7 @@ class RuleAddInstaller extends EmptyRule {
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         $supports = $this->getSubInstaller()->supports($package->getType());
+
         return $supports;
     }
 
@@ -64,7 +66,7 @@ class RuleAddInstaller extends EmptyRule {
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
         $installPath = $this->getSubInstaller()->getInstallPath($package);
+
         return new RuleValueResult($installPath);
     }
-
 }

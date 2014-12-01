@@ -6,8 +6,8 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\InstallerInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
-interface Rule {
-
+interface Rule
+{
     /**
      * @return void
      */
@@ -26,5 +26,4 @@ interface Rule {
     public function getInstallPath(RuleResult $prevResult,
         PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller);
-
 }

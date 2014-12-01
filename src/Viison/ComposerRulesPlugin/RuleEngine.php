@@ -6,8 +6,8 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\InstallerInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
-class RuleEngine {
-
+class RuleEngine
+{
     const CONFIG_RULE_NAME = 'rule';
 
     /**
@@ -31,7 +31,8 @@ class RuleEngine {
     protected $instances = array();
 
     public function __construct(RuleConfig $config, RuleFactory $factory,
-        Logger $logger) {
+        Logger $logger)
+    {
         $this->config = $config;
         $this->factory = $factory;
         $this->logger = $logger;
@@ -44,64 +45,66 @@ class RuleEngine {
     {
         $this->logger->logMethod(__METHOD__,
             array($rootPackage, $repo, $package));
-        $result = $this->onEach(function($rule, $prevResult)
-            use ($rootPackage, $repo, $package, $mainInstaller)
-            {
+        $result = $this->onEach(function ($rule, $prevResult) use ($rootPackage, $repo, $package, $mainInstaller) {
                 $rule->postInstall($prevResult, $rootPackage, $repo, $package,
                     $mainInstaller);
+
                 return new RuleValueResult(null);
             });
 
-        if ($result instanceof RuleResultWithValue)
+        if ($result instanceof RuleResultWithValue) {
             return $result->getValue();
-        else
+        } else {
             throw new \Exception('Not implemented. Result = '
-                . json_encode($result));
+                .json_encode($result));
+        }
     }
 
     public function getInstallPath(PackageInterface $rootPackage,
         PackageInterface $package, InstallerInterface $mainInstaller)
     {
-        $result = $this->onEach(function($rule, $prevResult)
-            use ($rootPackage, $package, $mainInstaller)
-            {
-                if ($rule->canGetInstallPath($rootPackage, $package, $mainInstaller))
+        $result = $this->onEach(function ($rule, $prevResult) use ($rootPackage, $package, $mainInstaller) {
+                if ($rule->canGetInstallPath($rootPackage, $package, $mainInstaller)) {
                     return $rule->getInstallPath($prevResult, $rootPackage, $package, $mainInstaller);
-                else
+                } else {
                     return $prevResult;
+                }
             });
 
-        if ($result instanceof RuleResultWithValue)
+        if ($result instanceof RuleResultWithValue) {
             return $result->getValue();
-        elseif ($result instanceof RuleNoneResult)
+        } elseif ($result instanceof RuleNoneResult) {
             return null;
-        else
+        } else {
             throw new \Exception('Not implemented. Result = '
-                . json_encode($result));
+                .json_encode($result));
+        }
     }
 
-    protected function onEach(Callable $do)
+    protected function onEach(callable $do)
     {
         $rules = $this->config->get();
         $result = new RuleNoneResult();
         foreach ($rules as $ruleId => $ruleConfig) {
             $ruleName = $ruleConfig[static::CONFIG_RULE_NAME];
-            if (!isset($this->instances[$ruleId]))
+            if (!isset($this->instances[$ruleId])) {
                 $this->instances[$ruleId] = $this->factory
                     ->create($ruleName, $ruleConfig);
+            }
             $prevResult = $result;
             $result = $do($this->instances[$ruleId], $prevResult);
 
-            if (!($result instanceof RuleResult))
+            if (!($result instanceof RuleResult)) {
                 throw new \Exception('A rule needs to return a rule result, '
-                    . 'but result = ' . gettype($result) . ' for rule '
-                    . $ruleName . '.');
+                    .'but result = '.gettype($result).' for rule '
+                    .$ruleName.'.');
+            }
 
-            if ($result->isFinal())
+            if ($result->isFinal()) {
                 return $result;
+            }
         }
 
         return $result;
     }
-
 }

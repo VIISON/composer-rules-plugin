@@ -2,7 +2,8 @@
 
 namespace Viison\ComposerRulesPlugin;
 
-class RuleValueResult implements RuleResultWithValue {
+class RuleValueResult implements RuleResultWithValue
+{
     private $value;
 
     public function __construct($value)

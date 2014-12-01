@@ -2,7 +2,8 @@
 
 namespace Viison\ComposerRulesPlugin;
 
-class RuleNoneResult implements RuleResult {
+class RuleNoneResult implements RuleResult
+{
     public function isFinal()
     {
         return false;

@@ -8,8 +8,8 @@ use Composer\Plugin\PluginInterface;
 use Composer\Plugin\PluginEvents;
 use Composer\EventDispatcher\EventSubscriberInterface;
 
-class Plugin implements PluginInterface, EventSubscriberInterface {
-
+class Plugin implements PluginInterface, EventSubscriberInterface
+{
     public function activate(Composer $composer, IOInterface $io)
     {
         $logger = new Logger($io);
@@ -22,7 +22,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
     {
         return array(
             PluginEvents::COMMAND => array(
-                array('onCommand', 0)
+                array('onCommand', 0),
             ),
         );
     }
@@ -31,5 +31,4 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
     {
         echo __METHOD__, ' ', $event->getCommandName(), " ################ \n";
     }
-
 }
