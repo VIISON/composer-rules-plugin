@@ -4,8 +4,8 @@ VIISON/composer-rules-plugin
 This free and open source MIT-licensed Composer plugin allows you to add
 additional processing rules to your Composer-based dependency installation.
 
-Usage:
-------
+Usage
+-----
 
 1. This plugin is not published on packagist yet. To add it to your
    Composer-based project, add the corresponding repository for it to your
