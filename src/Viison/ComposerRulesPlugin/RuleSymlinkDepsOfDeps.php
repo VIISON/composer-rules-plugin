@@ -177,7 +177,10 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
 
             throw new \Exception('A symbolic link at ' . $link
                 . ' already exists. It points to ' . $oldTarget
-                . ' but it should point to ' . $target . '.');
+                . ' (realpath = ' . $realOldTarget. ')'
+                . ' but it should point to ' . $target
+                . ' (realpath = ' . $targetRealpath . ')'
+                . '.');
         }
 
         $linkDir = dirname($link);
