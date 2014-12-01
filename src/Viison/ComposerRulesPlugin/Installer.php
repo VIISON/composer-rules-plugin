@@ -146,8 +146,68 @@ class Installer extends LibraryInstaller
         $this->logger->logMethod(__METHOD__, array($repo, $package));
         parent::install($repo, $package);
 
-        return $this->getRuleEngine()->postInstall($this->getRootPackage(),
+        return $this->runPostInstallForPackage($repo, $package);
+    }
+
+    /**
+     * @var array List of package names for which post install has been run.
+     */
+    protected $postInstallRunFor = array();
+
+    protected function runPostInstallForPackage(
+        InstalledRepositoryInterface $repo,
+        PackageInterface $package)
+    {
+        $retVal = $this->getRuleEngine()->postInstall($this->getRootPackage(),
             $repo, $package, $this);
+        $this->postInstallRunFor[] = $this->normalizePackageName(
+            $package->getName());
+
+        return $retVal;
+    }
+
+    protected function normalizePackageName($packageName)
+    {
+        return strtolower($packageName); // FIXME: Check what composer actually needs.
+    }
+
+    public function runRemainingPostInstalls()
+    {
+        $allPackages = $this->getAllPackagesRecursively();
+
+        $packageMap = array();
+        $allPackageNames = array();
+        foreach ($allPackages as $package) {
+            $packageName = $this->normalizePackageName(
+                $package->getName());
+            $allPackageNames[] = $packageName;
+            $packageMap[$packageName] = $package;
+        }
+
+        $remainingPostInstalls = array_diff($allPackageNames,
+            $this->postInstallRunFor);
+
+        $this->logger->logMethod(__METHOD__,
+            array('remaining post installs: ', $remainingPostInstalls));
+
+        $localRepo = $this->composer->getRepositoryManager()
+            ->getLocalRepository();
+
+        foreach ($remainingPostInstalls as $remainingPostInstall) {
+            $package = $packageMap[$remainingPostInstall];
+            $this->runPostInstallForPackage($localRepo, $package);
+        }
+    }
+
+    /**
+     * @FIXME Check whether this actually gets recursive dependencies.
+     */
+    protected function getAllPackagesRecursively()
+    {
+        $localRepo = $this->composer->getRepositoryManager()
+            ->getLocalRepository();
+
+        return $localRepo->getCanonicalPackages();
     }
 
     public function update(InstalledRepositoryInterface $repo,
@@ -203,9 +263,11 @@ class Installer extends LibraryInstaller
 
         if (!isset($installPath)) {
             $installPath = parent::getInstallPath($package);
-            echo "     ->   ordinary installPath = $installPath\n";
+            $this->logger->logMethodStep(__METHOD__,
+                array('->   ordinary installPath', $installPath));
         } else {
-            echo "     -> ruleEngine installPath = $installPath\n";
+            $this->logger->logMethodStep(__METHOD__,
+                array('-> ruleEngine installPath', $installPath));
         }
 
         return $installPath;
