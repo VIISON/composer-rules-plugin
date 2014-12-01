@@ -6,8 +6,8 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\InstallerInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
-class EmptyRule implements Rule {
-
+class EmptyRule implements Rule
+{
     public function postInstall(RuleResult $prevResult,
         PackageInterface $rootPackage,
         InstalledRepositoryInterface $repo,
@@ -30,5 +30,4 @@ class EmptyRule implements Rule {
     {
         throw new \Exception('Not implemented');
     }
-
 }

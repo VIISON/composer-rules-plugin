@@ -2,8 +2,8 @@
 
 namespace Viison\ComposerRulesPlugin;
 
-class RuleConfig {
-
+class RuleConfig
+{
     /**
      * @var array The extra.vision-installer.rules configuration array.
      */
@@ -28,5 +28,4 @@ class RuleConfig {
     {
         return $this->ruleConfig;
     }
-
 }

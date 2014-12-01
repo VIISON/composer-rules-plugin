@@ -2,8 +2,7 @@
 
 namespace Viison\ComposerRulesPlugin;
 
-interface RuleResult {
-
+interface RuleResult
+{
     public function isFinal();
-
 }

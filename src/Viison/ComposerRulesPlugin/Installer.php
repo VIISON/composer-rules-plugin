@@ -9,8 +9,8 @@ use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Util\Filesystem;
 
-class Installer extends LibraryInstaller {
-
+class Installer extends LibraryInstaller
+{
     const CONFIG_VIISON_INSTALLER_KEY = 'composer-rules-plugin';
     const CONFIG_ROOT_DIR = 'root-dir';
     const CONFIG_AS_ROOT = 'as-root';
@@ -70,37 +70,46 @@ class Installer extends LibraryInstaller {
     protected function getInstallerConfig()
     {
         $extra = $this->getRootPackage()->getExtra();
-        if (!isset($extra))
+        if (!isset($extra)) {
             return array();
-        if (!is_array($extra))
+        }
+        if (!is_array($extra)) {
             throw new \Exception(
                 'The root package\'s "extra" configuration must be an array.');
-        if (!isset($extra[static::CONFIG_VIISON_INSTALLER_KEY]))
+        }
+        if (!isset($extra[static::CONFIG_VIISON_INSTALLER_KEY])) {
             return array();
-        if (!is_array($extra))
+        }
+        if (!is_array($extra)) {
             throw new \Exception(
                 'The root package\'s "extra.'
-                . static::CONFIG_VIISON_INSTALLER_KEY
-                . '" configuration must be an array.');
+                .static::CONFIG_VIISON_INSTALLER_KEY
+                .'" configuration must be an array.');
+        }
+
         return $extra[static::CONFIG_VIISON_INSTALLER_KEY];
     }
 
     protected function getInstallerRulesConfig()
     {
         $installerConfig = $this->getInstallerConfig();
-        if (!isset($installerConfig[static::CONFIG_RULES]))
+        if (!isset($installerConfig[static::CONFIG_RULES])) {
             return array();
+        }
+
         return $installerConfig[static::CONFIG_RULES];
     }
 
     protected function getConfigValue($key)
     {
         $installerConfig = $this->getInstallerConfig();
-        if (!isset($installerConfig))
+        if (!isset($installerConfig)) {
             throw new \Exception(
                 'No configuration value found for '
-                . 'extra.' . static::CONFIG_VIISON_INSTALLER_KEY . '.'  . $key
-                . ' under "extra" in the root package.');
+                .'extra.'.static::CONFIG_VIISON_INSTALLER_KEY.'.'.$key
+                .' under "extra" in the root package.');
+        }
+
         return $installerConfig[$key];
     }
 
@@ -111,12 +120,14 @@ class Installer extends LibraryInstaller {
 
     protected function getRuleEngine()
     {
-        if (isset($this->ruleEngine))
+        if (isset($this->ruleEngine)) {
             return $this->ruleEngine;
+        }
         $rules = $this->getInstallerRulesConfig();
         $ruleConfig = new RuleConfig($rules);
         $ruleFactory = new RuleFactory(
             $this->composer, $this->io, $this->filesystem);
+
         return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory,
             $this->logger);
     }
@@ -125,6 +136,7 @@ class Installer extends LibraryInstaller {
         PackageInterface $package)
     {
         $this->logger->logMethod(__METHOD__, array($repo, $package));
+
         return parent::isInstalled($repo, $package);
     }
 
@@ -133,6 +145,7 @@ class Installer extends LibraryInstaller {
     {
         $this->logger->logMethod(__METHOD__, array($repo, $package));
         parent::install($repo, $package);
+
         return $this->getRuleEngine()->postInstall($this->getRootPackage(),
             $repo, $package, $this);
     }
@@ -141,6 +154,7 @@ class Installer extends LibraryInstaller {
         PackageInterface $initial, PackageInterface $target)
     {
         $this->logger->logMethod(__METHOD__, array($repo, $initial, $target));
+
         return parent::update($repo, $initial, $target);
     }
 
@@ -148,12 +162,14 @@ class Installer extends LibraryInstaller {
         PackageInterface $package)
     {
         $this->logger->logMethod(__METHOD__, array($repo, $package));
+
         return parent::uninstall($repo, $package);
     }
 
     protected function installCode(PackageInterface $package)
     {
         $this->logger->logMethod(__METHOD__, array($package));
+
         return parent::installCode($package);
     }
 
@@ -161,12 +177,14 @@ class Installer extends LibraryInstaller {
         PackageInterface $target)
     {
         $this->logger->logMethod(__METHOD__, array($initial, $target));
+
         return parent::updateCode($initial, $target);
     }
 
     protected function removeCode(PackageInterface $package)
     {
         $this->logger->logMethod(__METHOD__, array($package));
+
         return parent::removeCode($package);
     }
 
@@ -192,5 +210,4 @@ class Installer extends LibraryInstaller {
 
         return $installPath;
     }
-
 }

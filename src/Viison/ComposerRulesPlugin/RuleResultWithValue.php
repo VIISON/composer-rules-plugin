@@ -2,8 +2,7 @@
 
 namespace Viison\ComposerRulesPlugin;
 
-interface RuleResultWithValue extends RuleResult {
-
+interface RuleResultWithValue extends RuleResult
+{
     public function getValue();
-
 }
