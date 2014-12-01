@@ -162,6 +162,8 @@ Caveats
 * This plugin may not work correctly or interfere with other Composer
   plugins/installers.
 
+* The tests only ever test your current local master branch.
+
 License
 -------
 

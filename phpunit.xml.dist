@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit
+        bootstrap="vendor/autoload.php"
+        colors="true"
+        concertErrorsToExceptions="true"
+        concertNoticesToExceptions="true"
+        concertWarningsToExceptions="true">
+    <testsuites>
+        <testsuite name="All">
+            <directory>test</directory>
+            <exclude>test/Viison/ComposerRulesPlugin/Test/data</exclude>
+        </testsuite>
+    </testsuites>
+</phpunit>
