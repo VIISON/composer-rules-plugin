@@ -14,21 +14,26 @@ class RuleFactory
     protected $map;
 
     public function __construct(
-        Composer $composer, IOInterface $io, Filesystem $filesystem)
+        Composer $composer, IOInterface $io, Filesystem $filesystem,
+        Logger $logger)
     {
         $this->map = array(
-            'rule-symlink-deps-of-deps' => function ($args) use ($composer, $io, $filesystem) {
-                    echo 'RuleSymlinkDepsOfDeps created.'."\n";
+            'rule-symlink-deps-of-deps' => function ($args) use ($composer, $io, $filesystem, $logger) {
+                $logger->logMethod(
+                    'RuleFactory::__construct:'.__LINE__,
+                    array('Creating RuleSymlinkDepsOfDeps.'));
 
-                    return new RuleSymlinkDepsOfDeps(
-                        $args, $composer, $io, $filesystem);
-                },
-            'rule-add-installer' => function ($args) use ($composer, $io, $filesystem) {
-                    echo 'RuleAddInstaller created.'."\n";
+                return new RuleSymlinkDepsOfDeps(
+                    $args, $composer, $io, $filesystem);
+            },
+            'rule-add-installer' => function ($args) use ($composer, $io, $filesystem, $logger) {
+                $logger->logMethod(
+                    'RuleFactory::__construct:'.__LINE__,
+                    array('Creating RuleAddInstaller.'));
 
-                    return new RuleAddInstaller(
-                        $args, $composer, $io, $filesystem);
-                },
+                return new RuleAddInstaller(
+                    $args, $composer, $io, $filesystem);
+            },
         );
     }
 
