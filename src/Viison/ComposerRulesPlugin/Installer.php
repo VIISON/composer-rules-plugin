@@ -36,6 +36,8 @@ use Composer\Util\Filesystem;
 
 class Installer extends LibraryInstaller
 {
+    use ComposerUtil;
+
     const CONFIG_VIISON_INSTALLER_KEY = 'composer-rules-plugin';
     const CONFIG_ROOT_DIR = 'root-dir';
     const CONFIG_AS_ROOT = 'as-root';
@@ -189,11 +191,6 @@ class Installer extends LibraryInstaller
             $package->getName());
 
         return $retVal;
-    }
-
-    protected function normalizePackageName($packageName)
-    {
-        return strtolower($packageName); // FIXME: Check what composer actually needs.
     }
 
     public function runRemainingPostInstalls()
