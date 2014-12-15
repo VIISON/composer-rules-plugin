@@ -7,6 +7,7 @@ class FixturesTest
 {
     const COMPOSER_JSON = 'composer.json';
     const COMPOSER_JSON_IN = 'composer.json.in';
+    const COMPOSER_JSON_POST_UPDATE_IN = 'composer-post-update.json.in';
 
     protected $cleanFiles = null;
     protected $cleanDirs = null;
@@ -144,22 +145,22 @@ class FixturesTest
     protected function prepareFixture($fixtureName, $fixtureDir, array
         $packages)
     {
-        $variables = array_map(function ($pkgName) {
+        $this->fixtureVariables = array_map(function ($pkgName) {
             return '@'.$pkgName.'-zip@';
         }, array_keys($packages));
 
-        $replacements = array();
+        $this->fixtureReplacements = array();
         foreach ($packages as $packageName => $packageDir) {
-            $replacements[] = 'file://'
+            $this->fixtureReplacements[] = 'file://'
                 .$this->getPackageZipFileName($packageName, $packageDir);
         }
 
-        $variables[] = '@'.self::COMPOSER_RULES_PLUGIN_PKG_NAME.'-git@';
-        $replacements[] = getcwd();
+        $this->fixtureVariables[] = '@'.self::COMPOSER_RULES_PLUGIN_PKG_NAME
+            .'-git@';
+        $this->fixtureReplacements[] = getcwd();
 
         foreach ($packages as $packageName => $packageDir) {
-            $this->prepareFixturePackage($packageName, $packageDir,
-                $variables, $replacements);
+            $this->prepareFixturePackage($packageName, $packageDir);
         }
     }
 
@@ -191,28 +192,34 @@ class FixturesTest
         return $zipName;
     }
 
-    protected function prepareFixturePackage($packageName,
-        $packageDir, array $variables, array $replacements)
+    protected function replaceComposerJson($inputFileName,
+        $packageDir)
+    {
+        $composerIn = $this->readJson($packageDir
+            .DIRECTORY_SEPARATOR.$inputFileName);
+        $composerJsonFileName = $packageDir.DIRECTORY_SEPARATOR
+                .self::COMPOSER_JSON;
+        if (file_exists($composerJsonFileName)) {
+            if (unlink($composerJsonFileName) === false) {
+                throw new \Exception('File '
+                    .escapeshellarg($composerJsonFileName)
+                    .' could not be removed.');
+            }
+        }
+
+        $composer = $this->replaceDeepJsonValue(
+            $composerIn, $this->fixtureVariables, $this->fixtureReplacements);
+        file_put_contents($composerJsonFileName,
+            json_encode($composer,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->cleanFiles[] = $composerJsonFileName;
+    }
+
+    protected function prepareFixturePackage($packageName, $packageDir)
     {
         if ($packageName !== self::COMPOSER_RULES_PLUGIN_PKG_NAME) {
             // ^ Do not manipulate the plugin's proper composer.json.
-            $composerIn = $this->readComposerJsonIn($packageDir);
-            $composerJsonFileName = $packageDir.DIRECTORY_SEPARATOR
-                    .self::COMPOSER_JSON;
-            if (file_exists($composerJsonFileName)) {
-                if (unlink($composerJsonFileName) === false) {
-                    throw new \Exception('File '
-                        .escapeshellarg($composerJsonFileName)
-                        .' could not be removed.');
-                }
-            }
-
-            $composer = $this->replaceDeepJsonValue(
-                $composerIn, $variables, $replacements);
-            file_put_contents($composerJsonFileName,
-                json_encode($composer,
-                    JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-            $this->cleanFiles[] = $composerJsonFileName;
+            $this->replaceComposerJson(self::COMPOSER_JSON_IN, $packageDir);
         }
 
         $packageZip = $this->getPackageZipFileName($packageName, $packageDir);
@@ -292,6 +299,37 @@ class FixturesTest
         if (empty($rootPkgDir)) {
             throw new \Exception('No root package found for fixture.');
         }
+        $this->composerInstall($rootPkgDir, $fixtureName);
+
+        $updateJsonIn = $rootPkgDir.DIRECTORY_SEPARATOR
+            .self::COMPOSER_JSON_POST_UPDATE_IN;
+        if (file_exists($updateJsonIn)) {
+            $this->replaceComposerJson(self::COMPOSER_JSON_POST_UPDATE_IN,
+                $rootPkgDir);
+            $this->composerUpdate($rootPkgDir, $fixtureName);
+        }
+    }
+
+    protected function composerInstall($rootPkgDir, $fixtureName)
+    {
+        $this->runComposer($rootPkgDir, array('install', '-v'));
+
+        $postComposerInstallTestMethodName = 'postComposerInstall'
+            .join('', array_map('ucfirst', explode('-', $fixtureName)));
+        $this->{$postComposerInstallTestMethodName}($rootPkgDir);
+    }
+
+    protected function composerUpdate($rootPkgDir, $fixtureName)
+    {
+        $this->runComposer($rootPkgDir, array('update', '-v'));
+
+        $postComposerUpdateTestMethodName = 'postComposerUpdate'
+            .join('', array_map('ucfirst', explode('-', $fixtureName)));
+        $this->{$postComposerUpdateTestMethodName}($rootPkgDir);
+    }
+
+    protected function runComposer($rootPkgDir, array $args)
+    {
         $currentDir = realpath(getcwd());
         try {
             chdir($rootPkgDir);
@@ -299,7 +337,9 @@ class FixturesTest
             $composerReturnVal = -1;
             $output = array();
             $composerCmd = escapeshellcmd(self::COMPOSER_BINARY)
-                .' install -v 2>&1';
+                .' '
+                .join(' ', array_map('escapeshellarg', $args))
+                .' 2>&1';
 
             $this->cleanFiles[] = $rootPkgDir.DIRECTORY_SEPARATOR
                 .'composer.lock';
@@ -319,10 +359,6 @@ class FixturesTest
                 'Could not run command '.$composerCmd
                 .'. Output was: '.PHP_EOL
                 .join(PHP_EOL, $composerOutput));
-
-            $postComposerTestMethodName = 'postComposer'
-                .join('', array_map('ucfirst', explode('-', $fixtureName)));
-            $this->{$postComposerTestMethodName}($rootPkgDir);
         } finally {
             if (!chdir($currentDir)) {
                 throw new \Exception('Could not chdir back to '
@@ -331,7 +367,12 @@ class FixturesTest
         }
     }
 
-    public function postComposerSymlinkTest($rootPkgDir)
+    protected function postComposerInstallSymlinkTest($rootPkgDir)
+    {
+        $this->assertCorrectSymlinks($rootPkgDir);
+    }
+
+    protected function assertCorrectSymlinks($rootPkgDir)
     {
         $vendorDir = $rootPkgDir.DIRECTORY_SEPARATOR.'vendor';
         $innerDepDir = $vendorDir.DIRECTORY_SEPARATOR
@@ -404,5 +445,14 @@ class FixturesTest
                     .escapeshellarg($currentDir).'.');
             }
         }
+    }
+
+    protected function postComposerInstallUpdateOuterDepTest($rootPkgDir)
+    {
+    }
+
+    protected function postComposerUpdateUpdateOuterDepTest($rootPkgDir)
+    {
+        $this->assertCorrectSymlinks($rootPkgDir);
     }
 }

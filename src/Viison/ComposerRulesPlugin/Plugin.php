@@ -60,7 +60,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPostUpdateCmd(Event $event)
     {
-        $this->handleScriptEvent($event);
+        $this->installer->runRemainingPostInstalls();
     }
 
     public function onPostPackageInstall(Event $event)

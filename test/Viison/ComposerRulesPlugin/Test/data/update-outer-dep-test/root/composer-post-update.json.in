@@ -1,0 +1,59 @@
+{
+    "name": "viison/composer-rules-plugin-test-root",
+    "license": "MIT",
+    "type": "project",
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "@Viison/composer-rules-plugin-git@"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "viison/composer-rules-plugin-test-outer-dep",
+                "version": "dev-master",
+                "dist": {
+                    "url": "@viison/composer-rules-plugin-test-outer-dep-zip@",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "viison/composer-rules-plugin-test-inner-dep",
+                "version": "dev-master",
+                "dist": {
+                    "url": "@viison/composer-rules-plugin-test-inner-dep-zip@",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "require": {
+        "Viison/composer-rules-plugin": "dev-master",
+        "viison/composer-rules-plugin-test-outer-dep": "dev-master",
+        "viison/composer-rules-plugin-test-inner-dep": "dev-master"
+    },
+    "extra": {
+        "composer-rules-plugin": {
+            "rules": [
+                {
+                    "rule": "rule-add-installer",
+                    "class": "Composer\\Installers\\Installer"
+                },
+                {
+                    "rule": "rule-symlink-deps-of-deps",
+                    "match-outer-deps": [
+                        "viison/composer-rules-plugin-test-outer-dep"
+                    ],
+                    "match-inner-deps": [
+                        "viison/composer-rules-plugin-test-inner-dep"
+                    ],
+                    "symlink-dest": ["%outerdir%/InnerDep"]
+                }
+            ]
+        }
+    }
+}

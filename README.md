@@ -156,8 +156,8 @@ change in future versions.
 Caveats
 -------
 
-* At this time, only the `composer install` use case is supported.
-  `composer update` and others may be broken by usage of this plugin.
+* At this time, only the `composer install` use case is considered supported.
+  `composer update` may not work for all scenarios.
 
 * This plugin may not work correctly or interfere with other Composer
   plugins/installers.

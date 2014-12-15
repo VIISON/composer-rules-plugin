@@ -54,6 +54,8 @@ class RuleEngine
 
         if ($result instanceof RuleResultWithValue) {
             return $result->getValue();
+        } elseif ($result instanceof RuleNoRulesResult) {
+            return null;
         } else {
             throw new \Exception('Not implemented. Result = '
                 .json_encode($result));
@@ -75,6 +77,8 @@ class RuleEngine
             return $result->getValue();
         } elseif ($result instanceof RuleNoneResult) {
             return null;
+        } elseif ($result instanceof RuleNoRulesResult) {
+            return null;
         } else {
             throw new \Exception('Not implemented. Result = '
                 .json_encode($result));
@@ -84,6 +88,10 @@ class RuleEngine
     protected function onEach(callable $do)
     {
         $rules = $this->config->get();
+        if (empty($rules)) {
+            return new RuleNoRulesResult();
+        }
+
         $result = new RuleNoneResult();
         foreach ($rules as $ruleId => $ruleConfig) {
             $ruleName = $ruleConfig[static::CONFIG_RULE_NAME];

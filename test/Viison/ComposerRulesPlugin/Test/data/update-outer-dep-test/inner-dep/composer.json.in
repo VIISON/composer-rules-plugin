@@ -1,0 +1,5 @@
+{
+    "name": "viison/composer-rules-plugin-test-inner-dep",
+    "license": "MIT",
+    "type": "shopware-core-plugin"
+}
