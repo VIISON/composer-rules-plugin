@@ -177,6 +177,11 @@ Caveats
 * Custom rules are not picked up. The supported rules are currently hard-coded
   in [`RuleFactory`](src/Viison/ComposerRulesPlugin/RuleFactory.php).
 
+Versioning
+----------
+
+This software uses [Semantic Versioning 2.0.0](http://semver.org/).
+
 License
 -------
 
