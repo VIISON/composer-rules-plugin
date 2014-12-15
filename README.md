@@ -4,13 +4,17 @@ VIISON/composer-rules-plugin
 This free and open source MIT-licensed Composer plugin allows you to add
 additional processing rules to your Composer-based dependency installation.
 
+These processing rules can adjust dependency installation paths, execute
+arbitrary code post-dependency installation and chain other Composer installer
+plugins.
+
 Usage
 -----
 
-1. This plugin is not published on packagist yet. To add it to your
-   Composer-based project, add the corresponding repository for it to your
-   `composer.json`. Composer's documentation describes how to [work with
-   repositories](https://getcomposer.org/doc/05-repositories.md#vcs).
+1. This plugin is not published on [Packagist](https://packagist.org/) yet. To
+   add it to your Composer-based project, add the corresponding repository for
+   it to your `composer.json`. Composer's documentation describes how to [work
+   with repositories](https://getcomposer.org/doc/05-repositories.md#vcs).
 
 2. Add the plugin to your `composer.json` as a dependency:
 
@@ -18,7 +22,7 @@ Usage
         ...
         "require": {
             ...
-            "VIISON/composer-rules-plugin": "dev-master",
+            "viison/composer-rules-plugin": "dev-master",
             ...
         },
         ...
@@ -90,7 +94,7 @@ rule-add-installer
         ...
         "require:" {
             ...
-            "VIISON/composer-rules-plugin": "dev-master",
+            "viison/composer-rules-plugin": "dev-master",
             ...
         },
         ...
@@ -145,13 +149,19 @@ rule-symlink-deps-of-deps
 Supported hooks
 ---------------
 
-Rules must implement the [Rule
+Rules must implement the [`Rule`
 interface](src/Viison/ComposerRulesPlugin/Rule.php) and can then
 manipulate dependencies' installation paths and execute actions after a
 dependency has been installed.
 
 The list of supported rules is currently statically configured. This may
 change in future versions.
+
+Running The Tests
+-----------------
+
+* To install the development dependencies: `composer install`
+* Run the tests: `./vendor/bin/phpunit`
 
 Caveats
 -------
@@ -164,8 +174,11 @@ Caveats
 
 * The tests only ever test your current local master branch.
 
+* Custom rules are not picked up. The supported rules are currently hard-coded
+  in [`RuleFactory`](src/Viison/ComposerRulesPlugin/RuleFactory.php).
+
 License
 -------
 
 `VIISON/composer-rules-plugin` is licensed under the MIT License - see the
-LICENSE file for details.
+[LICENSE](LICENSE) file for details.

@@ -1,5 +1,5 @@
 {
-    "name": "Viison/composer-rules-plugin",
+    "name": "viison/composer-rules-plugin",
     "type": "composer-plugin",
     "license": "MIT",
     "description": "This free and open source MIT-licensed Composer plugin allows you to add additional processing rules to your Composer-based dependency installation.",
