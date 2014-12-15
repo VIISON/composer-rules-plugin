@@ -251,8 +251,6 @@ class Installer extends LibraryInstaller
     public function getInstallPath(PackageInterface $package)
     {
         $this->logger->logMethod(__METHOD__, array($package));
-        //$e = new \Exception();
-        //echo str_replace("\n", "        \n", $e), "\n\n\n";
 
         $ruleEngine = $this->getRuleEngine();
 
