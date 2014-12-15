@@ -55,7 +55,7 @@ class RuleEngine
         if ($result instanceof RuleResultWithValue) {
             return $result->getValue();
         } elseif ($result instanceof RuleNoRulesResult) {
-            return null;
+            return;
         } else {
             throw new \Exception('Not implemented. Result = '
                 .json_encode($result));
@@ -76,9 +76,9 @@ class RuleEngine
         if ($result instanceof RuleResultWithValue) {
             return $result->getValue();
         } elseif ($result instanceof RuleNoneResult) {
-            return null;
+            return;
         } elseif ($result instanceof RuleNoRulesResult) {
-            return null;
+            return;
         } else {
             throw new \Exception('Not implemented. Result = '
                 .json_encode($result));

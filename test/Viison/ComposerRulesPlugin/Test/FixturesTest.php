@@ -44,7 +44,7 @@ class FixturesTest
             exec($cmd, $output, $returnVal);
             $this->assertEquals(0, $returnVal,
                 'Could not run command '.$cmd.'. Output was: '.PHP_EOL
-                .join(PHP_EOL, $output)
+                .implode(PHP_EOL, $output)
                 );
         }
 
@@ -249,7 +249,7 @@ class FixturesTest
 
             $this->assertEquals(0, $returnVal,
                 'Could not run command '.$zipCmd.'. Output was: '.PHP_EOL
-                .join(PHP_EOL, $output));
+                .implode(PHP_EOL, $output));
         } finally {
             if (!chdir($currentDir)) {
                 throw new \Exception('Could not chdir back to '
@@ -315,7 +315,7 @@ class FixturesTest
         $this->runComposer($rootPkgDir, array('install', '-v'));
 
         $postComposerInstallTestMethodName = 'postComposerInstall'
-            .join('', array_map('ucfirst', explode('-', $fixtureName)));
+            .implode('', array_map('ucfirst', explode('-', $fixtureName)));
         $this->{$postComposerInstallTestMethodName}($rootPkgDir);
     }
 
@@ -324,7 +324,7 @@ class FixturesTest
         $this->runComposer($rootPkgDir, array('update', '-v'));
 
         $postComposerUpdateTestMethodName = 'postComposerUpdate'
-            .join('', array_map('ucfirst', explode('-', $fixtureName)));
+            .implode('', array_map('ucfirst', explode('-', $fixtureName)));
         $this->{$postComposerUpdateTestMethodName}($rootPkgDir);
     }
 
@@ -338,7 +338,7 @@ class FixturesTest
             $output = array();
             $composerCmd = escapeshellcmd(self::COMPOSER_BINARY)
                 .' '
-                .join(' ', array_map('escapeshellarg', $args))
+                .implode(' ', array_map('escapeshellarg', $args))
                 .' 2>&1';
 
             $this->cleanFiles[] = $rootPkgDir.DIRECTORY_SEPARATOR
@@ -353,12 +353,12 @@ class FixturesTest
             $composerLog = $rootPkgDir.DIRECTORY_SEPARATOR.'composer.log';
             $this->cleanFiles[] = $composerLog;
             file_put_contents($composerLog,
-                join(PHP_EOL, $composerOutput));
+                implode(PHP_EOL, $composerOutput));
 
             $this->assertEquals(0, $composerReturnVal,
                 'Could not run command '.$composerCmd
                 .'. Output was: '.PHP_EOL
-                .join(PHP_EOL, $composerOutput));
+                .implode(PHP_EOL, $composerOutput));
         } finally {
             if (!chdir($currentDir)) {
                 throw new \Exception('Could not chdir back to '
