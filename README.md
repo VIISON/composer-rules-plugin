@@ -159,7 +159,8 @@ Caveats
 * At this time, only the `composer install` use case is supported.
   `composer update` and others may be broken by usage of this plugin.
 
-* This plugin disables all other Composer plugins which are loaded before it.
+* This plugin may not work correctly or interfere with other Composer
+  plugins/installers.
 
 License
 -------
