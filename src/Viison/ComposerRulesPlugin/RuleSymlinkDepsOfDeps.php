@@ -319,7 +319,6 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         for ($i = $matchingParts; $i < $targetPartsCount; $i++)
             $down .= $targetParts[$i] . DIRECTORY_SEPARATOR;
 
-        $linkFile = basename($link);
         return $up . $down;
     }
 

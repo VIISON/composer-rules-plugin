@@ -67,11 +67,6 @@ class Installer extends LibraryInstaller
         $this->logger = $logger;
         $this->logger->logMethod(__METHOD__, array());
         parent::__construct($io, $composer, null, $filesystem);
-        $this->checkConfig();
-    }
-
-    protected function checkConfig()
-    {
     }
 
     protected function getRootPackage()
@@ -160,14 +155,6 @@ class Installer extends LibraryInstaller
 
         return $this->ruleEngine = new RuleEngine($ruleConfig, $ruleFactory,
             $this->logger);
-    }
-
-    public function isInstalled(InstalledRepositoryInterface $repo,
-        PackageInterface $package)
-    {
-        $this->logger->logMethod(__METHOD__, array($repo, $package));
-
-        return parent::isInstalled($repo, $package);
     }
 
     public function install(InstalledRepositoryInterface $repo,
@@ -273,28 +260,6 @@ class Installer extends LibraryInstaller
         $this->logger->logMethod(__METHOD__, array($repo, $package));
 
         return parent::uninstall($repo, $package);
-    }
-
-    protected function installCode(PackageInterface $package)
-    {
-        $this->logger->logMethod(__METHOD__, array($package));
-
-        return parent::installCode($package);
-    }
-
-    protected function updateCode(PackageInterface $initial,
-        PackageInterface $target)
-    {
-        $this->logger->logMethod(__METHOD__, array($initial, $target));
-
-        return parent::updateCode($initial, $target);
-    }
-
-    protected function removeCode(PackageInterface $package)
-    {
-        $this->logger->logMethod(__METHOD__, array($package));
-
-        return parent::removeCode($package);
     }
 
     /**
