@@ -22,21 +22,13 @@ Usage
         ...
         "require": {
             ...
-            "viison/composer-rules-plugin": "dev-master",
+            "viison/composer-rules-plugin": "0.8",
             ...
         },
         ...
     ```
 
-3. Given this plugin has not officially been released yet, you have to set the
-   minimum (as in minimum required) stability of your dependencies to `dev`
-   in your `composer.json`:
-
-    ```javascript
-        "minimum-stability": "dev",
-    ```
-
-4. Add any rules you want to your `composer.json`:
+3. Add any rules you want to your `composer.json`:
 
     ```javascript
         ...
