@@ -63,7 +63,7 @@ Supported rules
 ---------------
 
 rule-add-installer
-:   Adds another [composer installer plugin
+:   Adds another [Composer installer plugin
     class](https://getcomposer.org/doc/articles/custom-installers.md).
     The installer class is determined by the `class` parameter.
     This class must implement Composer's `InstallerInterface` and must
