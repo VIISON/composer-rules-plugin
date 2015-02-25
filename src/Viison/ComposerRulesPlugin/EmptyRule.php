@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -39,7 +39,7 @@ class EmptyRule implements Rule
         PackageInterface $package,
         InstallerInterface $mainInstaller)
     {
-        return new RuleValueResult(null); // FIXME
+        return new RuleNoneResult();
     }
 
     public function canGetInstallPath(
