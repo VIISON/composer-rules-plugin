@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -33,8 +33,23 @@ use Composer\IO\IOInterface;
 use Composer\Composer;
 use Composer\Util\Filesystem;
 
+/**
+ * Chainloads another Composer installer plugin.
+ *
+ * Currently, only getInstallPath() is forwarded to the configured installer
+ * plugin.
+ *
+ * @see https://composer.github.com/installers composer/installers is an
+ *     installer plugin that can be used with this rule.
+ * @see https://getcomposer.org/doc/articles/custom-installers.md Composer's
+ *     documentation regarding custom installers.
+ */
 class RuleAddInstaller extends EmptyRule
 {
+    /**
+     * The configuration attribute specifying the class implementing
+     * Composer's InstallerInterface.
+     */
     const CONFIG_INSTALLER_CLASS = 'class';
 
     /**

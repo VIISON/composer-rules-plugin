@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,10 @@
 
 namespace Viison\ComposerRulesPlugin;
 
+/**
+ * Manages the rule configuration as read from a composer.json configuration
+ * file.
+ */
 class RuleConfig
 {
     /**

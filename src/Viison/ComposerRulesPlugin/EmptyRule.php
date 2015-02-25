@@ -31,6 +31,10 @@ use Composer\Package\PackageInterface;
 use Composer\Installer\InstallerInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
+/**
+ * EmptyRule can be used as an abstract Rule base class for rules which only
+ * require singular methods to be overriden.
+ */
 class EmptyRule implements Rule
 {
     public function postInstall(RuleResult $prevResult,

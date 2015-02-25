@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,6 +31,11 @@ use Composer\Package\PackageInterface;
 use Composer\IO\IOInterface;
 use Composer\Repository\WritableRepositoryInterface;
 
+/**
+ * A logger using Composer's IOInterface with special support for printing
+ * Composer-specific objects such as PackageInterfaces or
+ * WritableRepositoryInterfaces.
+ */
 class Logger
 {
     /**

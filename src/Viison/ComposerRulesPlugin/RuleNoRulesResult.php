@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,13 @@
 
 namespace Viison\ComposerRulesPlugin;
 
+/**
+ * A result indicating that there were no configured rules for handling the
+ * current event.
+ *
+ * @see RuleEngine::onEach() RuleEngine::onEach() uses this to indicate there
+ *     were no appropriate rules.
+ */
 class RuleNoRulesResult implements RuleResult
 {
     public function isFinal()

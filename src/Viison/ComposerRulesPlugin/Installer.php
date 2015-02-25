@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -34,6 +34,9 @@ use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Util\Filesystem;
 
+/**
+ * Executes rules defined by a RuleEngine.
+ */
 class Installer extends LibraryInstaller
 {
     use ComposerUtil;
@@ -181,6 +184,12 @@ class Installer extends LibraryInstaller
      */
     protected $postInstallRunFor = array();
 
+    /**
+     * Executes post install rules for a given package.
+     *
+     * @see install() install() calls this
+     * @see runRemainingPostInstalls() runRemainingPostInstalls() calls this
+     */
     protected function runPostInstallForPackage(
         InstalledRepositoryInterface $repo,
         PackageInterface $package)
@@ -193,6 +202,17 @@ class Installer extends LibraryInstaller
         return $retVal;
     }
 
+    /**
+     * Executes post install rules for packages where they have not yet been
+     * executed.
+     *
+     * With Composer, this can happen when this plugin was activated late
+     * during the installation process or when an update only affected some
+     * packages.
+     *
+     * @see Plugin::onPostInstallCmd() calls this
+     * @see Plugin::onPostUpdateCmd() calls this
+     */
     public function runRemainingPostInstalls()
     {
         $allPackages = $this->getAllPackagesRecursively();
@@ -232,6 +252,9 @@ class Installer extends LibraryInstaller
         return $localRepo->getCanonicalPackages();
     }
 
+    /**
+     * @FIXME: Need to evaluate whether this needs to be considered.
+     */
     public function update(InstalledRepositoryInterface $repo,
         PackageInterface $initial, PackageInterface $target)
     {
@@ -240,6 +263,10 @@ class Installer extends LibraryInstaller
         return parent::update($repo, $initial, $target);
     }
 
+    /**
+     * @FIXME: Will need to handle this in the future (i.e. remove old
+     *     symlinks).
+     */
     public function uninstall(InstalledRepositoryInterface $repo,
         PackageInterface $package)
     {
@@ -270,6 +297,10 @@ class Installer extends LibraryInstaller
         return parent::removeCode($package);
     }
 
+    /**
+     * Uses the RuleEngine to determine the directory in which a package
+     * should be installed.
+     */
     public function getInstallPath(PackageInterface $package)
     {
         $this->logger->logMethod(__METHOD__, array($package));

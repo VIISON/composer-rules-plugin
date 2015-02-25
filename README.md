@@ -177,6 +177,8 @@ Caveats
 * Custom rules are not picked up. The supported rules are currently hard-coded
   in [`RuleFactory`](src/Viison/ComposerRulesPlugin/RuleFactory.php).
 
+* Documentation is only rudimentary at this point.
+
 Versioning
 ----------
 

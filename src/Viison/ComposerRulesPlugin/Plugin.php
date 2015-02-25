@@ -2,7 +2,7 @@
 /**
  * VIISON/composer-rules-plugin
  *
- * Copyright (c) 2014 VIISON GmbH
+ * Copyright (c) 2014-2015 VIISON GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -47,6 +47,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     protected $logger;
 
+    /**
+     * FIXME: Need to evaluate how conflicts with other installer plugins may
+     *     arise.
+     */
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->logger = new Logger($io);
