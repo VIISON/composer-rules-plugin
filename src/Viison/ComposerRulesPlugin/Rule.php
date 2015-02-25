@@ -36,9 +36,6 @@ use Composer\Repository\InstalledRepositoryInterface;
  */
 interface Rule
 {
-    /**
-     * @return void
-     */
     public function postInstall(RuleResult $prevResult, PackageInterface
         $rootPackage,
         InstalledRepositoryInterface $repo,
