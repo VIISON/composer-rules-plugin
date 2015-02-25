@@ -81,10 +81,9 @@ class RuleEngine
             return $result->getValue();
         } elseif ($result instanceof RuleNoRulesResult) {
             return;
-        } else {
-            throw new \Exception('Not implemented. Result = '
-                .json_encode($result));
         }
+        throw new \Exception('Not implemented. Result = '
+            .json_encode($result));
     }
 
     public function getInstallPath(PackageInterface $rootPackage,
@@ -93,9 +92,8 @@ class RuleEngine
         $result = $this->onEach(function ($rule, $prevResult) use ($rootPackage, $package, $mainInstaller) {
                 if ($rule->canGetInstallPath($rootPackage, $package, $mainInstaller)) {
                     return $rule->getInstallPath($prevResult, $rootPackage, $package, $mainInstaller);
-                } else {
-                    return $prevResult;
                 }
+                return $prevResult;
             });
 
         if ($result instanceof RuleResultWithValue) {
@@ -104,10 +102,9 @@ class RuleEngine
             return;
         } elseif ($result instanceof RuleNoRulesResult) {
             return;
-        } else {
-            throw new \Exception('Not implemented. Result = '
-                .json_encode($result));
         }
+        throw new \Exception('Not implemented. Result = '
+            .json_encode($result));
     }
 
     protected function onEach(callable $do)
