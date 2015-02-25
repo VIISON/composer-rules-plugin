@@ -30,8 +30,9 @@
         concertWarningsToExceptions="true">
     <testsuites>
         <testsuite name="All">
-            <directory>test</directory>
-            <exclude>test/Viison/ComposerRulesPlugin/Test/data</exclude>
+            <directory>./test</directory>
+            <exclude>./test/Viison/ComposerRulesPlugin/Test/data</exclude>
+            <exclude>./vendor</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
