@@ -189,3 +189,15 @@ License
 
 `VIISON/composer-rules-plugin` is licensed under the MIT License - see the
 [LICENSE](LICENSE) file for details.
+
+<br/>
+<a href="https://viison.com">
+<img src="resources/VIISON_logo.png" width="180" alt="VIISON GmbH" />
+</a>
+
+Copyright 2014-2015 VIISON GmbH <https://viison.com/>
+
+All rights are reserved for the VIISON GmbH logo. You may distribute it as
+a part of this software package. You may not use it to endorse or promote
+products either derived from this software or otherwise without specific prior
+written permission.
