@@ -1,6 +1,6 @@
 <?php
 /**
- * VIISON/composer-rules-plugin
+ * This file is part of VIISON/composer-rules-plugin.
  *
  * Copyright (c) 2014 VIISON GmbH
  *
