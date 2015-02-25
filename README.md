@@ -62,89 +62,89 @@ Usage
 Supported rules
 ---------------
 
-rule-add-installer
-:   Adds another [Composer installer plugin
-    class](https://getcomposer.org/doc/articles/custom-installers.md).
-    The installer class is determined by the `class` parameter.
-    This class must implement Composer's `InstallerInterface` and must
-    have a public constructor supporting with the following signature:
+### rule-add-installer
+Adds another [Composer installer plugin
+class](https://getcomposer.org/doc/articles/custom-installers.md). The
+installer class is determined by the `class` parameter. This class must
+implement Composer's `InstallerInterface` and must have a public constructor
+supporting with the following signature:
 
-    ```php
-    <?php
-    use Composer\Composer;
-    use Composer\Installer\InstallerInterface;
-    use Composer\IO\IOInterface;
-    use Composer\Util\Filesystem;
+```php
+<?php
+use Composer\Composer;
+use Composer\Installer\InstallerInterface;
+use Composer\IO\IOInterface;
+use Composer\Util\Filesystem;
+// ...
+class MyInstaller implements InstallerInterface {
+    public function __construct(
+        IOInterface $io,
+        Composer $composer,
+        $type = 'library',
+        Filesystem $filesystem = null) { /* ... */ }
+}
+```
+
+This rule is intended to allow concurrent usage of the
+[composer/installers](https://composer.github.com/installers) plugin with this
+plugin. The following example shows this use case:
+
+```javascript
+{
     ...
-    class MyInstaller implements InstallerInterface {
-        public function __construct(
-            IOInterface $io,
-            Composer $composer,
-            $type = 'library',
-            Filesystem $filesystem = null) { /* ... */ }
-    }
-    ```
-
-    This rule is intended to allow concurrent usage of the
-    [composer/installers](https://composer.github.com/installers) plugin with
-    this plugin. The following example shows this use case:
-
-    ```javascript
-    {
+    "require:" {
         ...
-        "require:" {
-            ...
-            "viison/composer-rules-plugin": "dev-master",
-            ...
-        },
+        "viison/composer-rules-plugin": "dev-master",
         ...
-        "extra": {
-            "composer-rules-plugin": {
-                "rules": [
-                    {
-                        "rule": "rule-add-installer",
-                        "class": "Composer\\Installers\\Installer"
-                    }
-                ]
-            }
+    },
+    ...
+    "extra": {
+        "composer-rules-plugin": {
+            "rules": [
+                {
+                    "rule": "rule-add-installer",
+                    "class": "Composer\\Installers\\Installer"
+                }
+            ]
         }
     }
-    ```
+}
+```
 
-rule-symlink-deps-of-deps
-:   Creates symbolic links to an indirect dependency in the directory of
-    an outer dependency:
+### rule-symlink-deps-of-deps
+Creates symbolic links to an indirect dependency in the directory of an outer
+dependency:
 
-    ```javascript
-    {
+```javascript
+{
+    ...
+    "require:" {
         ...
-        "require:" {
-            ...
-            "dep/a": "*",
-            "VIISON/composer-rules-plugin": "dev-master",
-            ...
-        },
+        "dep/a": "*",
+        "VIISON/composer-rules-plugin": "dev-master",
         ...
-        "extra": {
-            "composer-rules-plugin": {
-                "rules": [
-                    {
-                        "rule": "rule-symlink-deps-of-deps",
-                        "match-outer-deps": ["dep/a"],
-                        "match-inner-deps": ["dep/b"],
-                        "symlink-dest": ["%outerdir%/symlink-to-b-inside-a"]
-                    }
-                ]
-            }
+    },
+    ...
+    "extra": {
+        "composer-rules-plugin": {
+            "rules": [
+                {
+                    "rule": "rule-symlink-deps-of-deps",
+                    "match-outer-deps": ["dep/a"],
+                    "match-inner-deps": ["dep/b"],
+                    "symlink-dest": ["%outerdir%/symlink-to-b-inside-a"]
+                }
+            ]
         }
     }
-    ```
+}
+```
 
-    In the above example, `dep/a` is a direct dependency of the root project.
-    `dep/b` is a dependency of `dep/a`. The `symlink-dest` parameters defines
-    that in the directory of the _outer_ dependency (`%outerdir%`), an
-    absolute symbolic link will be created named `symlink-to-b-inside-a`, with
-    the location of `dep/b` as its target.
+In the above example, `dep/a` is a direct dependency of the root project.
+`dep/b` is a dependency of `dep/a`. The `symlink-dest` parameters defines that
+in the directory of the _outer_ dependency (`%outerdir%`), an absolute
+symbolic link will be created named `symlink-to-b-inside-a`, with the location
+of `dep/b` as its target.
 
 Supported hooks
 ---------------
