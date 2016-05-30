@@ -33,6 +33,7 @@ use Composer\Plugin\PluginInterface;
 use Composer\Plugin\PluginEvents;
 use Composer\Script\ScriptEvents;
 use Composer\Script\Event;
+use Composer\Installer\PackageEvent;
 use Composer\EventDispatcher\EventSubscriberInterface;
 
 class Plugin implements PluginInterface, EventSubscriberInterface
@@ -76,7 +77,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
     }
 
-    protected function handleScriptEvent(Event $event)
+    protected function handleScriptEvent(\Composer\EventDispatcher\Event $event)
     {
         $this->logger->logMethod(__METHOD__,
             array('event: ', $event->getName()));
@@ -92,7 +93,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $this->installer->runRemainingPostInstalls();
     }
 
-    public function onPostPackageInstall(Event $event)
+    public function onPostPackageInstall(PackageEvent $event)
     {
         $this->handleScriptEvent($event);
     }
