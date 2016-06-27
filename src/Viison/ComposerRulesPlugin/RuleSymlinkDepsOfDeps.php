@@ -87,7 +87,6 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $this->logger->logMethod(__METHOD__, array($package->getPrettyName(),
             $this->params));
 
-        // FIXME: Composer seems to have some normalization rules ... Check.
         $matchOuterDeps = array_map(array($this, 'normalizePackageName'),
             $this->params[static::CONFIG_MATCH_OUTER_DEPS]);
         $matchInnerDeps = array_map(array($this, 'normalizePackageName'),
