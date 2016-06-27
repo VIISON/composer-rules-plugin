@@ -108,7 +108,7 @@ class RuleEngine
             .json_encode($result));
     }
 
-    protected function onEach(callable $do)
+    protected function onEach(\Closure $do)
     {
         $rules = $this->config->get();
         if (empty($rules)) {
