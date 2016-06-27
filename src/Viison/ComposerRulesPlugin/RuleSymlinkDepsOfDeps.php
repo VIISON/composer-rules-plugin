@@ -174,12 +174,14 @@ class RuleSymlinkDepsOfDeps extends EmptyRule
             throw new \Exception('No realpath for ' . $target);
 
         if (file_exists($link)) {
-
-            if (!is_link($link))
+            if (!is_link($link)) {
+                // FIXME: Use JSON_PRETTY_PRINT without check once we can depend on PHP >= 5.4.0:
+                $jsonOptions = (defined('JSON_PRETTY_PRINT')) ? JSON_PRETTY_PRINT : 0;
                 throw new \Exception('A file at ' . $link
                     . ' already exists and is not a symbolic link. '
                     . '(stat = '
-                    . json_encode(stat($link), JSON_PRETTY_PRINT) . ')');
+                    . json_encode(stat($link), $jsonOptions) . ')');
+            }
 
             $oldTarget = @readlink($link);
             if ($oldTarget === false)

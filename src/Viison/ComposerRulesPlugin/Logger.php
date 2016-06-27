@@ -88,8 +88,11 @@ class Logger
             return $item;
         }, $args);
 
+        // FIXME: Use JSON_PRETTY_PRINT without check once we can depend on PHP >= 5.4.0:
+        $jsonOptions = (defined('JSON_PRETTY_PRINT')) ? JSON_PRETTY_PRINT : 0;
+
         return "\n\n\n\n\n".$method.'('
             .str_replace("\n", "\n        ",
-                json_encode($args,  JSON_PRETTY_PRINT)).'):';
+                json_encode($args,  $jsonOptions)).'):';
     }
 }
