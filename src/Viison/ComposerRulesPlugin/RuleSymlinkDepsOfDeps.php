@@ -35,10 +35,8 @@ use Composer\Composer;
 use Composer\Util\Filesystem;
 use Composer\DependencyResolver\Operation\InstallOperation;
 
-class RuleSymlinkDepsOfDeps extends EmptyRule {
-
-    use ComposerUtil;
-
+class RuleSymlinkDepsOfDeps extends EmptyRule
+{
     const CONFIG_MATCH_OUTER_DEPS = 'match-outer-deps';
     const CONFIG_MATCH_INNER_DEPS = 'match-inner-deps';
     const CONFIG_SYMLINK_DESTINATION = 'symlink-dest';
@@ -87,22 +85,23 @@ class RuleSymlinkDepsOfDeps extends EmptyRule {
         $this->logger->logMethod(__METHOD__, array($package->getPrettyName(),
             $this->params));
 
-        $matchOuterDeps = array_map(array($this, 'normalizePackageName'),
+        $matchOuterDeps = array_map('\Viison\ComposerRulesPlugin\ComposerUtil::normalizePackageName',
             $this->params[static::CONFIG_MATCH_OUTER_DEPS]);
-        $matchInnerDeps = array_map(array($this, 'normalizePackageName'),
+        $matchInnerDeps = array_map('\Viison\ComposerRulesPlugin\ComposerUtil::normalizePackageName',
             $this->params[static::CONFIG_MATCH_INNER_DEPS]);
 
-        if (!in_array($this->normalizePackageName($package->getName()),
+        if (!in_array(ComposerUtil::normalizePackageName($package->getName()),
                       $matchOuterDeps, true)) {
             $this->logger->logMethodStep(__METHOD__, array('Not matched: '
-                . $package->getName() . ' with matches: ',
-                $matchOuterDeps));
+                .$package->getName().' with matches: ',
+                $matchOuterDeps, ));
+
             return;
         }
 
         $this->logger->logMethodStep(__METHOD__, array('Matched: '
-            . $package->getName() . ' with matches: ',
-            $matchOuterDeps));
+            .$package->getName().' with matches: ',
+            $matchOuterDeps, ));
 
         /* We do not only install symlinks for $package, but for every
          * package we know about, unless the package is not installed yet.

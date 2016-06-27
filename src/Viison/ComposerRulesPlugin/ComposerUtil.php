@@ -27,14 +27,14 @@
 
 namespace Viison\ComposerRulesPlugin;
 
-trait ComposerUtil
+class ComposerUtil
 {
     /**
      * Apply Composer's normalization to package names (lower-case them).
      *
      * This is not documented in Composer and not unified in its code base.
      */
-    protected function normalizePackageName($packageName)
+    public static function normalizePackageName($packageName)
     {
         return strtolower($packageName);
     }

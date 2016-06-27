@@ -39,8 +39,6 @@ use Composer\Util\Filesystem;
  */
 class Installer extends LibraryInstaller
 {
-    use ComposerUtil;
-
     const CONFIG_VIISON_INSTALLER_KEY = 'composer-rules-plugin';
     const CONFIG_ROOT_DIR = 'root-dir';
     const CONFIG_AS_ROOT = 'as-root';
@@ -183,7 +181,7 @@ class Installer extends LibraryInstaller
     {
         $retVal = $this->getRuleEngine()->postInstall($this->getRootPackage(),
             $repo, $package, $this);
-        $this->postInstallRunFor[] = $this->normalizePackageName(
+        $this->postInstallRunFor[] = ComposerUtil::normalizePackageName(
             $package->getName());
 
         return $retVal;
@@ -207,7 +205,7 @@ class Installer extends LibraryInstaller
         $packageMap = array();
         $allPackageNames = array();
         foreach ($allPackages as $package) {
-            $packageName = $this->normalizePackageName(
+            $packageName = ComposerUtil::normalizePackageName(
                 $package->getName());
             $allPackageNames[] = $packageName;
             $packageMap[$packageName] = $package;
